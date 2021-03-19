@@ -14,6 +14,16 @@ public class OptionData : MonoBehaviour
     RectTransform rect;
     bool selected;
 
+    public enum OptionTag {
+        Master,
+        BGM,
+        SE,
+        Lighting,
+        ColorVision
+    };
+
+    public OptionTag optionTag;
+
     // Start is called before the first frame update
     void Start () {
         rect = slider.GetComponent<RectTransform>();
@@ -57,5 +67,17 @@ public class OptionData : MonoBehaviour
 
     public void IsControl ( bool value ) {
         selected = value;
+    }
+
+    public bool GetSelected () {
+        return selected;
+    }
+
+    public OptionTag GetOptionTag () {
+        return optionTag;
+    }
+
+    public int GetValue () {
+        return value;
     }
 }
