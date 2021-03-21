@@ -576,6 +576,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
+  bullet: {fileID: 8024343307746172139, guid: 90d10d8a6ef9e7d42abf71d909adf20d, type: 3}
+  bulletSpeed: 1000
 --- !u!4 &1831062332 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4a2a89b9ca0c14649a4ea89a136b03c9,
