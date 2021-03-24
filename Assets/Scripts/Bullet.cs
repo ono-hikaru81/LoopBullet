@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
-{
+public class Bullet : MonoBehaviour {
     public GameObject planet;
     public float speed;
 
@@ -14,62 +13,51 @@ public class Player : MonoBehaviour
     Vector3 groundNormal;
 
     Rigidbody rb;
-    BoxCollider bc;
-
-    public GameObject bullet;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start () {
         gravity = 100;
         onGround = false;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        bc = GetComponent<BoxCollider>();
+        Destroy( gameObject, 5.0f );
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update () {
         // Movement
-        float x = Input.GetAxis( "Horizontal" ) * Time.deltaTime * speed;
-        float z = Input.GetAxis( "Vertical" ) * Time.deltaTime * speed;
+        float z = Time.deltaTime * speed;
 
-        transform.Translate( x, 0, z );
+        transform.Translate( 0, 0, z );
 
         // Gravity
         RaycastHit hit = new RaycastHit();
-        if( Physics.Raycast(transform.position, -transform.up, out hit, 10 ) ) {
+        if ( Physics.Raycast( transform.position, -transform.up, out hit, 10 ) ) {
             distanceToGround = hit.distance;
             groundNormal = hit.normal;
 
-            onGround = ( distanceToGround <= 0.2f ) ? true : false;
+            onGround = ( distanceToGround <= 0.1f ) ? true : false;
         }
 
         Vector3 gravDirection = ( transform.position - planet.transform.position ).normalized;
 
-        if( onGround == false ) {
+        if ( onGround == false ) {
             rb.AddForce( gravDirection * -gravity );
         }
 
         // Rotation
-        if( Input.GetButton( "CamRight" ) ) {
-            transform.Rotate( 0, 150 * Time.deltaTime, 0 );
-        }
-        if( Input.GetButton( "CamLeft" ) ) {
-            transform.Rotate( 0, -150 * Time.deltaTime, 0 );
-        }
 
         // 惑星に向けて平行をとる
         Quaternion toRotation = Quaternion.FromToRotation( transform.up, groundNormal ) * transform.rotation;
         transform.rotation = toRotation;
+    }
 
-        // Shot
-        if ( Input.GetButtonDown( "Shot" ) ) {
-            Vector3 shotPos = transform.position + transform.forward * 0.5f;
-            Instantiate( bullet, shotPos, transform.rotation );
+    private void OnCollisionEnter ( Collision collision ) {
+        if( collision.gameObject.tag == "Player" ||
+            collision.gameObject.tag == "Bullet" ) {
+            Destroy( gameObject );
         }
     }
 }
