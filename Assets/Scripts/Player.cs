@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public GameObject planet;
     public float speed;
@@ -14,6 +14,9 @@ public class Bullet : MonoBehaviour
     Vector3 groundNormal;
 
     Rigidbody rb;
+    BoxCollider bc;
+
+    public GameObject bullet;
 
     void Start()
     {
@@ -23,15 +26,16 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        //Destroy(gameObject, 5.0f);
+        bc = GetComponent<BoxCollider>();
     }
 
     void Update()
     {
         // Movement
-        float z = Time.deltaTime * speed;
+        float x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
+        float z = Input.GetAxis("Vertical") * Time.deltaTime * -speed;
 
-        transform.Translate(0, 0, z);
+        transform.Translate(x, 0, z);
 
         // Gravity
         RaycastHit hit = new RaycastHit();
@@ -40,7 +44,7 @@ public class Bullet : MonoBehaviour
             distanceToGround = hit.distance;
             groundNormal = hit.normal;
 
-            onGround = (distanceToGround <= 0.1f) ? true : false;
+            onGround = (distanceToGround <= 0.2f) ? true : false;
         }
 
         Vector3 gravDirection = (transform.position - planet.transform.position).normalized;
@@ -50,19 +54,16 @@ public class Bullet : MonoBehaviour
             rb.AddForce(gravDirection * -gravity);
         }
 
-        // Rotation
-
         // ˜f¯‚ÉŒü‚¯‚Ä•½s‚ð‚Æ‚é
         Quaternion toRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
         transform.rotation = toRotation;
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player" ||
-            collision.gameObject.tag == "Bullet")
+        // Shot
+        if (Input.GetButtonDown("Shot"))
         {
-            Destroy(gameObject);
+            Vector3 shotPos = transform.position + transform.forward * 0.5f;
+
+            Instantiate(bullet, shotPos, transform.rotation);
         }
     }
 }

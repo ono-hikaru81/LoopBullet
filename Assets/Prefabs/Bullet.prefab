@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7388993887985545865}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,9 +125,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f63bfb1a4355bf49b43614591b7ffdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planet: {fileID: 0}
+  planet: {fileID: 5915332307585923550, guid: 93dd1d568d7917b47a322bb0ad7b8a31, type: 3}
   speed: 10
-  distanceFromSurface: 1
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
