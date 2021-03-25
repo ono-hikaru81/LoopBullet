@@ -14,6 +14,9 @@ public class OptionData : MonoBehaviour
     RectTransform rect;
     bool selected;
 
+    public GameObject axisInputMng;
+    AxisDown ad;
+
     public enum OptionTag {
         Master,
         BGM,
@@ -29,6 +32,8 @@ public class OptionData : MonoBehaviour
         rect = slider.GetComponent<RectTransform>();
         valuePer = ( int ) rect.sizeDelta.x / maxValue;
         selected = false;
+
+        ad = axisInputMng.GetComponent<AxisDown>();
     }
 
     // Update is called once per frame
@@ -47,15 +52,15 @@ public class OptionData : MonoBehaviour
         if ( selected == false ) return;
 
         // ピンの操作
-        if( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
+        if ( ad.GetAxisDown( "DHorizontal" ) == -1 ) {
             value--;
-            if( value < 0 ) {
+            if ( value < 0 ) {
                 value = 0;
             }
         }
-        else if ( Input.GetKeyDown( KeyCode.RightArrow ) ) {
+        else if ( ad.GetAxisDown( "DHorizontal" ) == 1 ) {
             value++;
-            if( value > maxValue ) {
+            if ( value > maxValue ) {
                 value = maxValue;
             }
         }

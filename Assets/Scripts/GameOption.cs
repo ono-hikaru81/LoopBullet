@@ -9,23 +9,29 @@ public class GameOption : MonoBehaviour {
     public Text description;
 
     public GameObject[] options;
-    public OptionData[] optionDatas;
+    OptionData[] optionDatas;
     public int currentSelect;
 
     public AudioMixer mixer;
+
+    public GameObject axisInputMng;
+    AxisDown ad;
 
     // Start is called before the first frame update
     void Start () {
         currentSelect = 0;
         options[0].GetComponent<OptionData>().IsControl( true );
+        System.Array.Resize( ref optionDatas, options.Length );
         for(int i = 0; i < options.Length; i++ ) {
             optionDatas[i] = options[i].GetComponent<OptionData>();
         }
+
+        ad = axisInputMng.GetComponent<AxisDown>();
     }
 
     // Update is called once per frame
     void Update () {
-        if ( Input.GetKeyDown( KeyCode.UpArrow ) ) {
+        if ( ad.GetAxisDown( "DVertical" ) == 1 ) {
             currentSelect--;
             if ( currentSelect < 0 ) {
                 currentSelect = 0;
@@ -33,7 +39,7 @@ public class GameOption : MonoBehaviour {
 
             DescriptionUpdate();
         }
-        else if ( Input.GetKeyDown( KeyCode.DownArrow ) ) {
+        else if ( ad.GetAxisDown( "DVertical" ) == -1 ) {
             currentSelect++;
             if ( currentSelect >= options.Length ) {
                 currentSelect = options.Length - 1;
