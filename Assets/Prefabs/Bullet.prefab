@@ -126,4 +126,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planet: {fileID: 5915332307585923550, guid: 93dd1d568d7917b47a322bb0ad7b8a31, type: 3}
-  speed: 10
+  speed: 12
