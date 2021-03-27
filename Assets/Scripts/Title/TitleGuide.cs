@@ -14,8 +14,7 @@ public class TitleGuide : MonoBehaviour
     public GameObject option;
     Text optionText;
 
-    public GameObject axisInputMng;
-    AxisDown ad;
+    public AxisDown ad;
 
     public ChangeScreen cs;
 
@@ -46,8 +45,6 @@ public class TitleGuide : MonoBehaviour
         c = optionText.color;
         optionText.color = new Color( c.r, c.g, c.b, shadowAlpha );
 
-        ad = axisInputMng.GetComponent<AxisDown>();
-
         progress = Progress.Title;
     }
 
@@ -75,7 +72,8 @@ public class TitleGuide : MonoBehaviour
                     SwapAlpha();
                 }
                 else if ( Input.GetButtonDown( "Enter" ) ) {
-                    // 次のシーンへ
+                    // コントローラーの接続を誘導
+                    cs.Exec( 2 );
                 }
                 break;
             case Progress.Option:

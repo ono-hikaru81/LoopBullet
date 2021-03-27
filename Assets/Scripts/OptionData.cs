@@ -14,8 +14,7 @@ public class OptionData : MonoBehaviour
     RectTransform rect;
     bool selected;
 
-    public GameObject axisInputMng;
-    AxisDown ad;
+    public AxisDown ad;
 
     public enum OptionTag {
         Master,
@@ -32,8 +31,6 @@ public class OptionData : MonoBehaviour
         rect = slider.GetComponent<RectTransform>();
         valuePer = ( int ) rect.sizeDelta.x / maxValue;
         selected = false;
-
-        ad = axisInputMng.GetComponent<AxisDown>();
     }
 
     // Update is called once per frame

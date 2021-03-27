@@ -16,8 +16,7 @@ public class GameOption : MonoBehaviour {
 
     public ChangeScreen cs;
 
-    public GameObject axisInputMng;
-    AxisDown ad;
+    public AxisDown ad;
 
     // Start is called before the first frame update
     void Start () {
@@ -27,8 +26,6 @@ public class GameOption : MonoBehaviour {
         for(int i = 0; i < options.Length; i++ ) {
             optionDatas[i] = options[i].GetComponent<OptionData>();
         }
-
-        ad = axisInputMng.GetComponent<AxisDown>();
     }
 
     // Update is called once per frame
