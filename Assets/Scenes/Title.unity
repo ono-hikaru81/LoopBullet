@@ -499,7 +499,6 @@ GameObject:
   - component: {fileID: 303983076}
   - component: {fileID: 303983075}
   - component: {fileID: 303983077}
-  - component: {fileID: 303983078}
   m_Layer: 5
   m_Name: FirstAction
   m_TagString: Untagged
@@ -559,7 +558,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PUSH ANY BUTTON !!
+  m_Text: PUSH PLAY BUTTON !!
 --- !u!222 &303983076
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -580,36 +579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb697a44f4c92d4a9d7f8c3f8213c34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frashInterval: 30
---- !u!114 &303983078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303983073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1079241963}
-          m_TargetAssemblyTypeName: TitleGuide, Assembly-CSharp
-          m_MethodName: ShowTitleMenu
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  frashInterval: 0.5
 --- !u!1 &314065873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1178,7 +1148,6 @@ GameObject:
   - component: {fileID: 655242868}
   - component: {fileID: 655242870}
   - component: {fileID: 655242869}
-  - component: {fileID: 655242871}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -1227,7 +1196,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 150
+    m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -1247,19 +1216,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655242867}
   m_CullTransparentMesh: 1
---- !u!114 &655242871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 655242867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cb697a44f4c92d4a9d7f8c3f8213c34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  frashInterval: 30
 --- !u!1 &673070641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,7 +1227,6 @@ GameObject:
   - component: {fileID: 673070642}
   - component: {fileID: 673070644}
   - component: {fileID: 673070643}
-  - component: {fileID: 673070645}
   m_Layer: 5
   m_Name: BackGround
   m_TagString: Untagged
@@ -1336,35 +1291,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 673070641}
   m_CullTransparentMesh: 1
---- !u!114 &673070645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 673070641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2046125901}
-          m_TargetAssemblyTypeName: ImageFade, Assembly-CSharp
-          m_MethodName: SkipFade
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &736511624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,7 +1613,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &782593504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,7 +1708,6 @@ GameObject:
   - component: {fileID: 869231800}
   - component: {fileID: 869231802}
   - component: {fileID: 869231801}
-  - component: {fileID: 869231803}
   m_Layer: 5
   m_Name: Option
   m_TagString: Untagged
@@ -1831,11 +1756,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 80
+    m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
-    m_MaxSize: 100
+    m_MaxSize: 120
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1851,35 +1776,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869231799}
   m_CullTransparentMesh: 1
---- !u!114 &869231803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 869231799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1381962337}
-          m_TargetAssemblyTypeName: ChangeScreen, Assembly-CSharp
-          m_MethodName: Exec
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &910339400
 GameObject:
   m_ObjectHideFlags: 0
@@ -2199,6 +2095,8 @@ MonoBehaviour:
   firstAction: {fileID: 303983073}
   start: {fileID: 655242867}
   option: {fileID: 869231799}
+  axisInputMng: {fileID: 1574983157}
+  cs: {fileID: 1381962337}
 --- !u!1 &1128713127
 GameObject:
   m_ObjectHideFlags: 0
@@ -2672,7 +2570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1401439675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2869,6 +2767,7 @@ MonoBehaviour:
   - {fileID: 1911104047}
   currentSelect: 0
   mixer: {fileID: 24100000, guid: 89ebebecb210a734a85dd95b1991650c, type: 2}
+  cs: {fileID: 1381962337}
   axisInputMng: {fileID: 1574983157}
 --- !u!1 &1815101647
 GameObject:

@@ -20,5 +20,6 @@ public class ChangeScreen : MonoBehaviour
         if ( nextScreen >= screens.Length || nextScreen < 0 ) nextScreen = screens.Length - 1;
         screens[nextScreen].SetActive( true );
         screens[currentScreen].SetActive( false );
+        currentScreen = nextScreen;
     }
 }

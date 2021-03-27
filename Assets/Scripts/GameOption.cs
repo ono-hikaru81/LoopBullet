@@ -14,6 +14,8 @@ public class GameOption : MonoBehaviour {
 
     public AudioMixer mixer;
 
+    public ChangeScreen cs;
+
     public GameObject axisInputMng;
     AxisDown ad;
 
@@ -46,6 +48,11 @@ public class GameOption : MonoBehaviour {
             }
 
             DescriptionUpdate();
+        }
+
+        if( Input.GetButtonDown( "Cancel" ) ) {
+            cs.Exec( 0 );
+            return;
         }
 
         // カーソルの位置調整
