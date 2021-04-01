@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 9079440928808083075}
   - component: {fileID: 8530022017539681015}
   - component: {fileID: 4789148663068343326}
-  - component: {fileID: 3847220892694869581}
   - component: {fileID: 492836901909441547}
   - component: {fileID: 7388993887985545865}
+  - component: {fileID: 4812589778704429346}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Bullet
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8024343307746172139}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.007554531, y: 19.546064, z: -1.9999676}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -84,19 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3847220892694869581
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8024343307746172139}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &492836901909441547
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -110,9 +97,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &7388993887985545865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,4 +113,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planet: {fileID: 5915332307585923550, guid: 93dd1d568d7917b47a322bb0ad7b8a31, type: 3}
-  speed: 12
+  speed: 5
+--- !u!136 &4812589778704429346
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8024343307746172139}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.099999994
+  m_Height: 0.29999998
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}

@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 50f4ebc315b77194aba15a325b92157c, type: 3}
+  m_Texture: {fileID: 2800000, guid: 0056d08c3fee7554c9f210cc6c9bc083, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -278,6 +278,7 @@ GameObject:
   - component: {fileID: 352910006}
   - component: {fileID: 352910008}
   - component: {fileID: 352910007}
+  - component: {fileID: 352910009}
   m_Layer: 5
   m_Name: BackGround
   m_TagString: Untagged
@@ -328,7 +329,7 @@ MonoBehaviour:
   m_UVRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: -0
     width: 1
     height: 1
 --- !u!222 &352910008
@@ -339,6 +340,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352910005}
   m_CullTransparentMesh: 1
+--- !u!114 &352910009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352910005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fa528b859ee8b84c90981639d192bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value: 0.1
 --- !u!1 &422513390
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,8 +1124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
+  m_HorizontalAxis: Horizontal1
+  m_VerticalAxis: Vertical1
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10

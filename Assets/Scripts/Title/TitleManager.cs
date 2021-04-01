@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour {
     public GameObject title;
@@ -100,7 +101,7 @@ public class TitleManager : MonoBehaviour {
     void Connect () {
         // 次の画面へ
         if ( Input.GetButtonDown( "Enter" ) ) {
-
+            SceneManager.LoadScene( "MainGame" );
         }
         // 前の画面へ
         else if ( Input.GetButtonDown( "Cancel" ) ) {
