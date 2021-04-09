@@ -14,6 +14,12 @@ public class Bullet : MonoBehaviour {
 
     Rigidbody rb;
 
+    Player master;
+    public Player Master {
+        get { return master; }
+        set { master = value; }
+    }
+
     void Start () {
         gravity = 100;
         onGround = false;
@@ -51,7 +57,16 @@ public class Bullet : MonoBehaviour {
     }
 
     private void OnCollisionEnter ( Collision collision ) {
-        if(collision.gameObject.tag == "Player" ) {
+        if ( collision.gameObject.tag == "Player" ) {
+            Player p = collision.gameObject.GetComponent<Player>();
+            if ( p.TakeDamage == true ) {
+                p.Hp--;
+                if ( p.Hp <= 0 ) {
+                    master.killedPlayers.Enqueue( p.icon );
+                    Destroy( collision.gameObject );
+                }
+            }
+
             Destroy( gameObject );
         }
 

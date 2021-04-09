@@ -56,7 +56,12 @@ public class Player : MonoBehaviour {
 
     public GameControl gc;
 
+    public Texture icon;
+    public Queue<Texture> killedPlayers;
+    public Texture[] tex;
+
     void Start () {
+        killedPlayers = new Queue<Texture>();
         fieldBullets = new Queue<GameObject>();
         gravity = 100;
         onGround = false;
@@ -98,8 +103,10 @@ public class Player : MonoBehaviour {
         }
 
         // Rotate
-        float y = Input.GetAxis( axisX ) * 150 * Time.deltaTime;
-        transform.Rotate( 0, y, 0 );
+        if ( disableInput == false ) {
+            float y = Input.GetAxis( axisX ) * 150 * Time.deltaTime;
+            transform.Rotate( 0, y, 0 );
+        }
 
         // 惑星に向けて平行をとる
         Quaternion toRotation = Quaternion.FromToRotation( transform.up, groundNormal ) * transform.rotation;
@@ -112,6 +119,7 @@ public class Player : MonoBehaviour {
             if ( magazine > 0 && shotCooldown <= 0 ) {
                 Vector3 shotPos = transform.position + transform.forward * 0.7f;
                 GameObject b = Instantiate( bullet, shotPos, transform.rotation );
+                b.GetComponent<Bullet>().Master = this;
                 fieldBullets.Enqueue( b );
                 if ( fieldBullets.Count > maxFieldBullet ) {
                     Destroy( fieldBullets.Dequeue() );
@@ -146,16 +154,7 @@ public class Player : MonoBehaviour {
         else if ( Input.GetButtonDown( "Cancel" ) ){
             gc.Pause( false );
         }
-    }
 
-    private void OnCollisionEnter ( Collision collision ) {
-        if ( collision.gameObject.tag == "Bullet" ) {
-            if ( TakeDamage == false ) return;
-
-            hp--;
-            if ( hp <= 0 ) {
-                Destroy( gameObject );
-            }
-        }
+        tex = killedPlayers.ToArray();
     }
 }

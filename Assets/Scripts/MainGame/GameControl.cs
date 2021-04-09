@@ -11,12 +11,21 @@ public class GameControl : MonoBehaviour {
     public GameObject countTwo;
     public GameObject countOne;
     public GameObject finish;
+    public GameObject result;
 
     public GameObject pause;
 
     Player winner;
 
     static bool isPause;
+    static bool isEnd;
+
+    public RawImage[] frames;
+
+    public RawImage winnerBanner;
+    public Texture[] winnerTex;
+
+    public GameObject menu;
 
     // Start is called before the first frame update
     void Start () {
@@ -26,28 +35,53 @@ public class GameControl : MonoBehaviour {
         countTwo.SetActive( false );
         countOne.SetActive( false );
         pause.SetActive( false );
+        result.SetActive( false );
+        menu.SetActive( false );
         StartCoroutine( StartLogo() );
         isPause = false;
+        isEnd = false;
     }
 
     // Update is called once per frame
     void Update () {
-        // 生存者チェック
-        int d = 0;
-        for ( int i = 0; i < players.Length; i++ ) {
-            if ( players[i].Hp <= 0 ) {
-                d++;
+        if ( menu.activeSelf == true ) return;
+
+        if ( isEnd == false ) {
+            // 生存者チェック
+            int d = 0;
+            for ( int i = 0; i < players.Length; i++ ) {
+                if ( players[i].Hp <= 0 ) {
+                    d++;
+                }
+                else {
+                    winner = players[i];
+                    winnerBanner.texture = winnerTex[i];
+                }
             }
-            else {
-                winner = players[i];
+
+            if ( d >= players.Length - 1 ) {
+                finish.SetActive( true );
+                winner.TakeDamage = false;
+                winner.DisableInput = true;
+                isEnd = true;
+                Invoke( "EndProc", 1.0f );
             }
         }
+        // 決着がついている
+        else {
+            if ( Input.GetButtonDown( "Enter" ) ) {
+                menu.SetActive( true );
+            }
+        }
+    }
 
-        if ( d >= players.Length - 1 ) {
-            finish.SetActive( true );
-            winner.TakeDamage = false;
-            // シーン遷移
-            // Invoke() で〇秒後に実行できる
+    void EndProc () {
+        result.SetActive( true );
+        menu.SetActive( false );
+        for(int i = 0; i < frames.Length; i++ ) {
+            if ( winner.killedPlayers.Peek() == null ) break;
+
+            frames[i].texture = winner.killedPlayers.Dequeue();
         }
     }
 
