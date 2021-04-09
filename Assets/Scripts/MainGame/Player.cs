@@ -58,7 +58,6 @@ public class Player : MonoBehaviour {
 
     public Texture icon;
     public Queue<Texture> killedPlayers;
-    public Texture[] tex;
 
     void Start () {
         killedPlayers = new Queue<Texture>();
@@ -154,7 +153,5 @@ public class Player : MonoBehaviour {
         else if ( Input.GetButtonDown( "Cancel" ) ){
             gc.Pause( false );
         }
-
-        tex = killedPlayers.ToArray();
     }
 }

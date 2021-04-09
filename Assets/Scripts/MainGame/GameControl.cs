@@ -88,7 +88,7 @@ public class GameControl : MonoBehaviour {
     public void Pause ( bool value ) {
         isPause = value;
         if ( isPause == true ) {
-            Time.timeScale = 0.01f;
+            Time.timeScale = 0.0001f;
             pause.SetActive( true );
         }
         else {
