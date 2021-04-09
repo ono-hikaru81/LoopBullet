@@ -12,17 +12,20 @@ public class Result : MonoBehaviour {
 
     RawImage[] menus;
 
-    int currnetSelect;
+    int currentSelect;
+
+    GameSetting gs;
 
     // Start is called before the first frame update
     void Start () {
+        gs = GameObject.Find( "GameSetting" ).GetComponent<GameSetting>();
         menus = new RawImage[]{
             again,
             stage,
             title
         };
 
-        currnetSelect = 0;
+        currentSelect = 0;
     }
 
     // Update is called once per frame
@@ -31,28 +34,29 @@ public class Result : MonoBehaviour {
         float axis = ad.GetAxisDown( "DVertical" );
         // 上
         if(axis >= 1 ) {
-            currnetSelect--;
-            if(currnetSelect < 0 ) {
-                currnetSelect = 0;
+            currentSelect--;
+            if(currentSelect < 0 ) {
+                currentSelect = 0;
             }
         }
         // 下
         else if(axis <= -1 ) {
-            currnetSelect++;
-            if( currnetSelect >= menus.Length ) {
-                currnetSelect = menus.Length - 1;
+            currentSelect++;
+            if( currentSelect >= menus.Length ) {
+                currentSelect = menus.Length - 1;
             }
         }
 
         // 選択中の項目の処理
         if ( Input.GetButtonDown( "Enter" ) ) {
-            if ( menus[currnetSelect] == again ) {
+            if ( menus[currentSelect] == again ) {
                 SceneManager.LoadScene( "MainGame" );
             }
-            else if ( menus[currnetSelect] == stage ) {
-                // ステージ選択へ
+            else if ( menus[currentSelect] == stage ) {
+                gs.Scene = GameSetting.Scenes.Stage;
+                SceneManager.LoadScene( "Title" );
             }
-            else if ( menus[currnetSelect] == title ) {
+            else if ( menus[currentSelect] == title ) {
                 SceneManager.LoadScene( "Title" );
             }
         }
@@ -62,6 +66,6 @@ public class Result : MonoBehaviour {
             temp.color = new Color( 0.5f, 0.5f, 0.5f );
         }
 
-        menus[currnetSelect].color = new Color( 1.0f, 1.0f, 1.0f );
+        menus[currentSelect].color = new Color( 1.0f, 1.0f, 1.0f );
     }
 }

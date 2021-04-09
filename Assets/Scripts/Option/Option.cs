@@ -20,8 +20,15 @@ public class Option : MonoBehaviour {
 
     int currentSelect;  // 設定中の項目
 
+    public GameObject rule;
+    public RawImage ruleRI;
+    public Texture[] rules;
+    int page;
+
     // Start is called before the first frame update
     void Start () {
+        rule.SetActive( false );
+        page = 0;
         currentSelect = 0;
         sliders = new Slider[] {
             masterVol,
@@ -34,6 +41,15 @@ public class Option : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if ( rule.activeSelf == false ) {
+            OptionScene();
+        }
+        else {
+            RuleScene();
+        }
+    }
+
+    void OptionScene () {
         float axis = ad.GetAxisDown( "DVertical" );
         // 上キー
         if ( axis == 1 ) {
@@ -53,6 +69,13 @@ public class Option : MonoBehaviour {
 
             ChangeItem();
         }
+        // 決定ボタン
+        else if ( Input.GetButtonDown( "Enter" ) ) {
+            rule.SetActive( true );
+        }
+        else if ( Input.GetButtonDown( "Cancel" ) ) {
+            gameObject.SetActive( false );
+        }
 
         // 音量変更
         float vol = -80 + masterVol.CurrentValue * 8;
@@ -61,6 +84,23 @@ public class Option : MonoBehaviour {
         am.SetFloat( "BGM", vol );
         vol = -80 + seVol.CurrentValue * 8;
         am.SetFloat( "SE", vol );
+    }
+
+    void RuleScene () {
+        if ( Input.GetButtonDown( "Enter" ) ) {
+            page++;
+        }
+        else if ( Input.GetButtonDown( "Cancel" ) ) {
+            page--;
+        }
+
+        if ( page >= rules.Length || page < 0 ) {
+            page = 0;
+            rule.SetActive( false );
+            return;
+        }
+
+        ruleRI.texture = rules[page];
     }
 
     // 操作する項目の変更

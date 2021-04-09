@@ -23,8 +23,8 @@ public class StatusUI : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         // HP
-        int h = player.Hp - 1;
-        if ( h < 0 ) {
+        int h = player.Hp;
+        if ( h <= 0 ) {
             Color c = result.color;
             c.a = 1.0f;
             result.color = c;
@@ -33,18 +33,18 @@ public class StatusUI : MonoBehaviour {
             if ( h >= hpSpr.Length ) {
                 h = hpSpr.Length - 1;
             }
-
-            hp.texture = hpSpr[h];
         }
+
+        hp.texture = hpSpr[h];
 
         // Item
 
         // Bullet
-        foreach(RawImage temp in magazine ) {
+        foreach ( RawImage temp in magazine ) {
             temp.texture = bulletEmpty;
         }
 
-        for( int i = 0; i < player.Magazine; i++ ) {
+        for ( int i = 0; i < player.Magazine; i++ ) {
             magazine[i].texture = bullet;
         }
     }
