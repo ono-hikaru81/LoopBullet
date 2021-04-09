@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
-    public GameObject planet;
+    GameObject planet;
+    public GameObject Planet {
+        get { return planet; }
+        set { planet = value; }
+    }
+
     public float speed;
 
     float gravity;
@@ -26,6 +31,8 @@ public class Bullet : MonoBehaviour {
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        planet = master.Planet;
     }
 
     void Update () {
@@ -63,7 +70,7 @@ public class Bullet : MonoBehaviour {
                 p.Hp--;
                 if ( p.Hp <= 0 ) {
                     master.killedPlayers.Enqueue( p.icon );
-                    Destroy( collision.gameObject );
+                    p.DeathProc();
                 }
             }
 

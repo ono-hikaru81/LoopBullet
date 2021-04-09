@@ -27,6 +27,10 @@ public class GameControl : MonoBehaviour {
 
     public GameObject menu;
 
+    public TitleManager tm;
+
+    GameSetting gs;
+
     // Start is called before the first frame update
     void Start () {
         start.SetActive( false );
@@ -40,6 +44,28 @@ public class GameControl : MonoBehaviour {
         StartCoroutine( StartLogo() );
         isPause = false;
         isEnd = false;
+        gs = GameObject.Find( "GameSetting" ).GetComponent<GameSetting>();
+        // 星の生成
+        GameObject star;
+        switch ( gs.Star ) {
+            case GameSetting.Stars.Jimejime:
+                star = ( GameObject ) Resources.Load( "Prefabs/St1_Jimejime" );
+                break;
+            case GameSetting.Stars.Moon:
+                star = ( GameObject ) Resources.Load( "Prefabs/St2_Moon" );
+                break;
+            case GameSetting.Stars.Magmag:
+                // star = ( GameObject ) Resources.Load( "Prefabs/St3_Magmag" );
+                star = ( GameObject ) Resources.Load( "Prefabs/St2_Moon" ); // モデルが出来れば上を使用
+                break;
+            default:
+                star = ( GameObject ) Resources.Load( "Prefabs/St1_Jimejime" );
+                break;
+        }
+        star = Instantiate( star, new Vector3( 0, 0, 0 ), Quaternion.identity );
+        foreach ( Player temp in players ) {
+            temp.Planet = star;
+        }
     }
 
     // Update is called once per frame

@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-    public GameObject planet;
+    GameObject planet;
+    public GameObject Planet {
+        get { return planet; }
+        set { planet = value; }
+    }
+
     public float speed;
 
     public string axisX;
@@ -59,6 +64,9 @@ public class Player : MonoBehaviour {
     public Texture icon;
     public Queue<Texture> killedPlayers;
 
+    BoxCollider bc;
+    MeshRenderer mr;
+
     void Start () {
         killedPlayers = new Queue<Texture>();
         fieldBullets = new Queue<GameObject>();
@@ -70,7 +78,8 @@ public class Player : MonoBehaviour {
         disableInput = false;
         shotCooldown = shotInterval;
         takeDamage = true;
-
+        bc = GetComponent<BoxCollider>();
+        mr = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
@@ -153,5 +162,12 @@ public class Player : MonoBehaviour {
         else if ( Input.GetButtonDown( "Cancel" ) ){
             gc.Pause( false );
         }
+    }
+
+    public void DeathProc () {
+        bc.enabled = false;
+        mr.enabled = false;
+        disableInput = true;
+        takeDamage = false;
     }
 }
