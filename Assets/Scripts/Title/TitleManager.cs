@@ -126,8 +126,10 @@ public class TitleManager : MonoBehaviour {
     void Connect () {
         // 次の画面へ
         if ( Input.GetButtonDown( "Enter" ) ) {
-            gs.Scene = GameSetting.Scenes.Stage;
-            ChangeScreen( gs.Scene );
+            if ( gs.GetJoinedPlayers() > 0 ) {
+                gs.Scene = GameSetting.Scenes.Stage;
+                ChangeScreen( gs.Scene );
+            }
         }
         // 前の画面へ
         else if ( Input.GetButtonDown( "Cancel" ) ) {

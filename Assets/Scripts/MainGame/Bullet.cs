@@ -69,7 +69,7 @@ public class Bullet : MonoBehaviour {
             if ( p.TakeDamage == true ) {
                 p.Hp--;
                 if ( p.Hp <= 0 ) {
-                    master.killedPlayers.Enqueue( p.icon );
+                    master.KilledPlayers.Enqueue( p.icon );
                     p.DeathProc();
                 }
             }

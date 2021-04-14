@@ -43,6 +43,11 @@ public class GameControl : MonoBehaviour {
         isPause = false;
         isEnd = false;
         gs = GameObject.Find( "GameSetting" ).GetComponent<GameSetting>();
+        // プレイヤーの生成
+        for(int i = 0; i < gs.ButtonBinds.Length; i++ ) {
+            players[i].Data = gs.ButtonBinds[i];
+        }
+
         // 星の生成
         GameObject star;
         switch ( gs.Star ) {
@@ -103,9 +108,10 @@ public class GameControl : MonoBehaviour {
         result.SetActive( true );
         menu.SetActive( false );
         for(int i = 0; i < frames.Length; i++ ) {
-            if ( winner.killedPlayers.Peek() == null ) break;
+            if ( winner.KilledPlayers.Count == 0 ) break;
+            if ( winner.KilledPlayers.Peek() == null ) break;
 
-            frames[i].texture = winner.killedPlayers.Dequeue();
+            frames[i].texture = winner.KilledPlayers.Dequeue();
         }
     }
 

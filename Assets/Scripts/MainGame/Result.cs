@@ -57,6 +57,7 @@ public class Result : MonoBehaviour {
                 SceneManager.LoadScene( "Title" );
             }
             else if ( menus[currentSelect] == title ) {
+                gs.Scene = GameSetting.Scenes.Title;
                 SceneManager.LoadScene( "Title" );
             }
         }

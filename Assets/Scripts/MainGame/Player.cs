@@ -11,10 +11,6 @@ public class Player : MonoBehaviour {
 
     public float speed;
 
-    public string axisX;
-    public string axisY;
-    public string shot;
-
     public int maxHp;
     int hp;
     public int Hp {
@@ -62,10 +58,19 @@ public class Player : MonoBehaviour {
     public GameControl gc;
 
     public Texture icon;
-    public Queue<Texture> killedPlayers;
+    Queue<Texture> killedPlayers;
+    public Queue<Texture> KilledPlayers {
+        get { return killedPlayers; }
+    }
 
     BoxCollider bc;
     MeshRenderer mr;
+
+    GameSetting.PlayerData data;
+    public GameSetting.PlayerData Data {
+        get { return data; }
+        set { data = value; }
+    }
 
     void Start () {
         killedPlayers = new Queue<Texture>();
@@ -82,6 +87,9 @@ public class Player : MonoBehaviour {
         mr = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        if ( data.Join == false ) {
+            DeathProc();
+        }
     }
 
     void Update () {
@@ -89,8 +97,8 @@ public class Player : MonoBehaviour {
         float x = 0;
         float z = 0;
         if ( disableInput == false ) {
-            x = Input.GetAxis( axisX ) * Time.deltaTime * speed;
-            z = Input.GetAxis( axisY ) * Time.deltaTime * -speed;
+            x = Input.GetAxis( data.Horizontal ) * Time.deltaTime * speed;
+            z = Input.GetAxis( data.Vertical ) * Time.deltaTime * -speed;
         }
 
         transform.Translate( x, 0, z );
@@ -112,7 +120,7 @@ public class Player : MonoBehaviour {
 
         // Rotate
         if ( disableInput == false ) {
-            float y = Input.GetAxis( axisX ) * 150 * Time.deltaTime;
+            float y = Input.GetAxis( data.Horizontal ) * 150 * Time.deltaTime;
             transform.Rotate( 0, y, 0 );
         }
 
@@ -123,7 +131,7 @@ public class Player : MonoBehaviour {
         // Shot
         shotCooldown -= Time.deltaTime;
 
-        if ( Input.GetButtonDown( shot ) && disableInput == false ) {
+        if ( Input.GetButtonDown( data.Shot ) && disableInput == false ) {
             if ( magazine > 0 && shotCooldown <= 0 ) {
                 Vector3 shotPos = transform.position + transform.forward * 0.7f;
                 GameObject b = Instantiate( bullet, shotPos, transform.rotation );
@@ -165,6 +173,7 @@ public class Player : MonoBehaviour {
     }
 
     public void DeathProc () {
+        hp = 0;
         bc.enabled = false;
         mr.enabled = false;
         disableInput = true;
