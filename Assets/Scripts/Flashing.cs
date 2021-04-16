@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Flashing : MonoBehaviour {
-    public float flashInterval;
+    [SerializeField] float flashInterval;
     float timer;
     RawImage ri;
 
@@ -20,13 +20,7 @@ public class Flashing : MonoBehaviour {
         if ( timer < 0 ) {
             timer = flashInterval;
             Color c = ri.color;
-            if ( c.a == 0 ) {
-                c.a = 1.0f;
-            }
-            else {
-                c.a = 0;
-            }
-
+            c.a = (c.a == 0) ? 1.0f : 0.0f;
             ri.color = c;
         }
     }
