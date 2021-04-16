@@ -1,157 +1,151 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour {
-    public Player[] players;
+	[SerializeField] GameSetting gs;
+	[SerializeField] Player[] players;
 
-    public GameObject start;
-    public GameObject countThree;
-    public GameObject countTwo;
-    public GameObject countOne;
-    public GameObject finish;
-    public GameObject result;
+	[SerializeField] GameObject start;
+	[SerializeField] GameObject[] countNum;
+	[SerializeField] GameObject finish;
+	[SerializeField] GameObject result;
+	[SerializeField] GameObject pause;
+	Player winner;
+	static bool isPause;    // ポーズフラグ
+	static bool isStart;    // ゲーム開始フラグ
+	static bool isEnd;  // ゲーム終了フラグ
+	[SerializeField] float playTime;    // プレイ時間
+	float timer;
+	public float Timer {
+		get { return timer; }
+		set { timer = value; }
+	}
+	[SerializeField] Texture drawBanner;
 
-    public GameObject pause;
+	// Start is called before the first frame update
+	void Start () {
+		timer = playTime;
+		start.SetActive ( false );
+		finish.SetActive ( false );
+		foreach (var c in countNum) {
+			c.SetActive ( false );
+		}
+		pause.SetActive ( false );
+		result.SetActive ( false );
+		StartCoroutine ( StartLogo () );
+		isPause = false;
+		isStart = false;
+		isEnd = false;
+		// プレイヤーの生成
+		for (int i = 0; i < gs.ButtonBinds.Length; i++) {
+			players[i].Data = gs.ButtonBinds[i];
+		}
 
-    Player winner;
+		// 星の生成
+		GameObject star;
+		switch (gs.Star) {
+			case GameSetting.Stars.Jimejime:
+				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
+				break;
+			case GameSetting.Stars.Moon:
+				star = (GameObject)Resources.Load ( "Prefabs/St2_Moon" );
+				break;
+			case GameSetting.Stars.Magmag:
+				// star = ( GameObject ) Resources.Load( "Prefabs/St3_Magmag" );
+				star = (GameObject)Resources.Load ( "Prefabs/St2_Moon" ); // モデルが出来れば上を使用
+				break;
+			default:
+				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
+				break;
+		}
+		star = Instantiate ( star, new Vector3 ( 0, 0, 0 ), Quaternion.identity );
+		foreach (Player temp in players) {
+			temp.Planet = star;
+		}
+	}
 
-    static bool isPause;
-    static bool isEnd;
+	// Update is called once per frame
+	void Update () {
+		if (isStart == true && isEnd == false && isPause == false) {
+			timer -= Time.deltaTime;
+		}
 
-    public RawImage[] frames;
+		if (timer < 0) {
+			isEnd = true;
+		}
 
-    public RawImage winnerBanner;
-    public Texture[] winnerTex;
+		if (isEnd == true) {    // ゲーム終了したら
+			Invoke ( "EndProc", 1.0f );
+		}
+	}
 
-    public GameObject menu;
+	void EndProc () {
+		winner = players[0];
+		bool draw = false;
+		foreach (Player p in players) {
+			if (winner != p) {
+				if (winner.Score == p.Score) {
+					draw = true;
+					break;
+				}
 
-    GameSetting gs;
+				if (p.Score > winner.Score) {
+					winner = p;
+				}
+			}
+		}
 
-    // Start is called before the first frame update
-    void Start () {
-        start.SetActive( false );
-        finish.SetActive( false );
-        countThree.SetActive( false );
-        countTwo.SetActive( false );
-        countOne.SetActive( false );
-        pause.SetActive( false );
-        result.SetActive( false );
-        menu.SetActive( false );
-        StartCoroutine( StartLogo() );
-        isPause = false;
-        isEnd = false;
-        gs = GameObject.Find( "GameSetting" ).GetComponent<GameSetting>();
-        // プレイヤーの生成
-        for(int i = 0; i < gs.ButtonBinds.Length; i++ ) {
-            players[i].Data = gs.ButtonBinds[i];
-        }
+		if (draw == true) {
+			result.GetComponent<Result> ().SetWinnerTex ( drawBanner );
+		}
+		else {
+			result.GetComponent<Result> ().SetWinnerTex ( winner );
+		}
 
-        // 星の生成
-        GameObject star;
-        switch ( gs.Star ) {
-            case GameSetting.Stars.Jimejime:
-                star = ( GameObject ) Resources.Load( "Prefabs/St1_Jimejime" );
-                break;
-            case GameSetting.Stars.Moon:
-                star = ( GameObject ) Resources.Load( "Prefabs/St2_Moon" );
-                break;
-            case GameSetting.Stars.Magmag:
-                // star = ( GameObject ) Resources.Load( "Prefabs/St3_Magmag" );
-                star = ( GameObject ) Resources.Load( "Prefabs/St2_Moon" ); // モデルが出来れば上を使用
-                break;
-            default:
-                star = ( GameObject ) Resources.Load( "Prefabs/St1_Jimejime" );
-                break;
-        }
-        star = Instantiate( star, new Vector3( 0, 0, 0 ), Quaternion.identity );
-        foreach ( Player temp in players ) {
-            temp.Planet = star;
-        }
-    }
+		result.SetActive ( true );
+	}
 
-    // Update is called once per frame
-    void Update () {
-        if ( menu.activeSelf == true ) return;
+	public void Pause ( bool value ) {
+		isPause = value;
+		if (isPause == true) {
+			Time.timeScale = 0.0001f;
+			pause.SetActive ( true );
+		}
+		else {
+			Time.timeScale = 1;
+			pause.SetActive ( false );
+		}
+	}
 
-        if ( isEnd == false ) {
-            // 生存者チェック
-            int d = 0;
-            for ( int i = 0; i < players.Length; i++ ) {
-                if ( players[i].Hp <= 0 ) {
-                    d++;
-                }
-                else {
-                    winner = players[i];
-                    winnerBanner.texture = winnerTex[i];
-                }
-            }
+	IEnumerator StartLogo () {
+		yield return new WaitForSeconds ( 0.01f );
 
-            if ( d >= players.Length - 1 ) {
-                finish.SetActive( true );
-                winner.TakeDamage = false;
-                winner.DisableInput = true;
-                isEnd = true;
-                Invoke( "EndProc", 1.0f );
-            }
-        }
-        // 決着がついている
-        else {
-            if ( Input.GetButtonDown( "Enter" ) ) {
-                menu.SetActive( true );
-            }
-        }
-    }
+		foreach (Player temp in players) {
+			temp.DisableInput = true;
+		}
 
-    void EndProc () {
-        result.SetActive( true );
-        menu.SetActive( false );
-        for(int i = 0; i < frames.Length; i++ ) {
-            if ( winner.KilledPlayers.Count == 0 ) break;
-            if ( winner.KilledPlayers.Peek() == null ) break;
+		countNum[2].SetActive ( true );
+		yield return new WaitForSeconds ( 1.0f );
+		countNum[2].SetActive ( false );
 
-            frames[i].texture = winner.KilledPlayers.Dequeue();
-        }
-    }
+		countNum[1].SetActive ( true );
+		yield return new WaitForSeconds ( 1.0f );
+		countNum[1].SetActive ( false );
 
-    public void Pause ( bool value ) {
-        isPause = value;
-        if ( isPause == true ) {
-            Time.timeScale = 0.0001f;
-            pause.SetActive( true );
-        }
-        else {
-            Time.timeScale = 1;
-            pause.SetActive( false );
-        }
-    }
+		countNum[0].SetActive ( true );
+		yield return new WaitForSeconds ( 1.0f );
+		countNum[0].SetActive ( false );
 
-    IEnumerator StartLogo () {
-        yield return new WaitForSeconds( 0.01f );
+		start.SetActive ( true );
+		yield return new WaitForSeconds ( 0.5f );
+		start.SetActive ( false );
 
-        foreach ( Player temp in players ) {
-            temp.DisableInput = true;
-        }
-
-        countThree.SetActive( true );
-        yield return new WaitForSeconds( 1.0f );
-        countThree.SetActive( false );
-
-        countTwo.SetActive( true );
-        yield return new WaitForSeconds( 1.0f );
-        countTwo.SetActive( false );
-
-        countOne.SetActive( true );
-        yield return new WaitForSeconds( 1.0f );
-        countOne.SetActive( false );
-
-        start.SetActive( true );
-        yield return new WaitForSeconds( 0.5f );
-        start.SetActive( false );
-
-        foreach ( Player temp in players ) {
-            temp.DisableInput = false;
-        }
-    }
+		isStart = true;
+		foreach (Player temp in players) {
+			temp.DisableInput = false;
+		}
+	}
 }

@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public class AxisDown : MonoBehaviour {
-    public string[] axis;   // 判定したい軸
+    [SerializeField] string[] axis;   // 判定したい軸
     float[] axisValue;  // 軸の値
     float[] beforeValue;    // 前回の軸の値
 

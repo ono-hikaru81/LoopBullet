@@ -3,48 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StatusUI : MonoBehaviour {
-    public Player player;
-    public RawImage hp;
-    public Texture[] hpSpr;
-    public RawImage item;
-    public RawImage[] magazine;
-    public Texture bullet;
-    public Texture bulletEmpty;
-    public RawImage result;
+public class StatusUI : MonoBehaviour
+{
+    [SerializeField] Player player;
+    [SerializeField] Text score;
+    [SerializeField] RawImage item;
+    [SerializeField] RawImage[] magazine;
+    [SerializeField] Texture bullet;
+    [SerializeField] Texture bulletEmpty;
+    [SerializeField] RawImage result;
 
     // Start is called before the first frame update
-    void Start () {
+    void Start()
+    {
         Color c = result.color;
         c.a = 0;
         result.color = c;
+        score.text = "0";
     }
 
     // Update is called once per frame
-    void Update () {
-        // HP
-        int h = player.Hp;
-        if ( h <= 0 ) {
-            Color c = result.color;
-            c.a = 1.0f;
-            result.color = c;
-        }
-        else {
-            if ( h >= hpSpr.Length ) {
-                h = hpSpr.Length - 1;
-            }
-        }
-
-        hp.texture = hpSpr[h];
+    void Update()
+    {
+        // Score
+        score.text = player.Score.ToString();
 
         // Item
 
         // Bullet
-        foreach ( RawImage temp in magazine ) {
+        foreach (RawImage temp in magazine)
+        {
             temp.texture = bulletEmpty;
         }
 
-        for ( int i = 0; i < player.Magazine; i++ ) {
+        for (int i = 0; i < player.Magazine; i++)
+        {
             magazine[i].texture = bullet;
         }
     }

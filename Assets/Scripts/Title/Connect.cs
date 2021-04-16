@@ -4,65 +4,64 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Connect : MonoBehaviour {
-    public GameSetting gs;
-    public GameObject[] icons;
-    public GameObject[] unconnecteds;
-    GameSetting.PlayerData[] binds;
+	[SerializeField] GameSetting gs;
+	[SerializeField] GameObject[] icons;
+	[SerializeField] GameObject[] unconnecteds;
+	GameSetting.PlayerData[] binds;
 
-    // Start is called before the first frame update
-    void Start () {
-        binds = new GameSetting.PlayerData[] {
-            new GameSetting.PlayerData(false, "Horizontal1", "Vertical1", "Shot1", "Item1"),
-            new GameSetting.PlayerData(false, "Horizontal2", "Vertical2", "Shot2", "Item2"),
-            new GameSetting.PlayerData(false, "Horizontal3", "Vertical3", "Shot3", "Item3"),
-            new GameSetting.PlayerData(false, "Horizontal4", "Vertical4", "Shot4", "Item4"),
-        };
+	// Start is called before the first frame update
+	void Start () {
+		{
+			string h = "Horizontal";
+			string v = "Vertical";
+			string s = "Shot";
+			string i = "Item";
+			System.Array.Resize ( ref binds, 4 );
+			for (int p = 1; p < 5; p++) {
+				string n = p.ToString ();
+				binds[p - 1] = new GameSetting.PlayerData () { Join = false, Horizontal = h + n, Vertical = v + n, Shot = s + n, Item = i + n };
+			}
+		}
 
-        for ( int i = 0; i < gs.ButtonBinds.Length; i++ ) {
-            if ( gs.ButtonBinds[i].Join == true ) {
-                icons[i].SetActive( true );
-                unconnecteds[i].SetActive( false );
-            }
-            else {
-                icons[i].SetActive( false );
-                unconnecteds[i].SetActive( true );
-            }
+		for (int i = 0; i < gs.ButtonBinds.Length; i++) {
+			if (gs.ButtonBinds[i].Join == true) {
+				icons[i].SetActive ( true );
+				unconnecteds[i].SetActive ( false );
+			}
+			else {
+				icons[i].SetActive ( false );
+				unconnecteds[i].SetActive ( true );
+			}
 
-            if ( gs.GetJoinedPlayers() == 0 ) {
-                gs.ButtonBinds[i] = binds[i];
-            }
-        }
-    }
+			if (gs.GetJoinedPlayers () == 0) {
+				gs.ButtonBinds[i] = binds[i];
+			}
+		}
+	}
 
-    // Update is called once per frame
-    void Update () {
-        if ( Input.GetButtonDown( "Connect1" ) ) {
-            Entry( 0 );
-        }
+	// Update is called once per frame
+	void Update () {
+		if (Input.GetButtonDown ( "Connect1" )) {
+			Entry ( 0 );
+		}
 
-        if ( Input.GetButtonDown( "Connect2" ) ) {
-            Entry( 1 );
-        }
+		if (Input.GetButtonDown ( "Connect2" )) {
+			Entry ( 1 );
+		}
 
-        if ( Input.GetButtonDown( "Connect3" ) ) {
-            Entry( 2 );
-        }
+		if (Input.GetButtonDown ( "Connect3" )) {
+			Entry ( 2 );
+		}
 
-        if ( Input.GetButtonDown( "Connect4" ) ) {
-            Entry( 3 );
-        }
-    }
+		if (Input.GetButtonDown ( "Connect4" )) {
+			Entry ( 3 );
+		}
+	}
 
-    void Entry ( int num ) {
-        if ( gs.ButtonBinds[num].Join == false ) {
-            gs.ButtonBinds[num].Join = true;
-            icons[num].SetActive( true );
-            unconnecteds[num].SetActive( false );
-        }
-        else {
-            gs.ButtonBinds[num].Join = false;
-            icons[num].SetActive( false );
-            unconnecteds[num].SetActive( true );
-        }
-    }
+	void Entry ( int num ) {
+		bool j = gs.ButtonBinds[num].Join;
+		gs.ButtonBinds[num].Join = !j;
+		icons[num].SetActive ( !j );
+		unconnecteds[num].SetActive ( j );
+	}
 }

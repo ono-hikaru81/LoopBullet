@@ -1,84 +1,79 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
-    GameObject planet;
-    public GameObject Planet {
-        get { return planet; }
-        set { planet = value; }
-    }
+	GameObject planet;  // 重力を受ける星
+	public GameObject Planet {
+		get { return planet; }
+		set { planet = value; }
+	}
+	[SerializeField] float speed;
+	const float GRAVITY = 100;
+	bool onGround;
+	float distanceToGround; // 地面からの距離
+	Vector3 groundNormal;
+	Rigidbody rb;
+	Player master;  // 自分を撃ち出したプレイヤー
+	public Player Master {
+		get { return master; }
+		set { master = value; }
+	}
 
-    public float speed;
+	void Start () {
+		onGround = false;
 
-    float gravity;
-    bool onGround;
+		rb = GetComponent<Rigidbody> ();
+		rb.freezeRotation = true;
 
-    float distanceToGround;
-    Vector3 groundNormal;
+		planet = master.Planet;
+	}
 
-    Rigidbody rb;
+	void Update () {
+		// Movement
+		float z = Time.deltaTime * speed;
 
-    Player master;
-    public Player Master {
-        get { return master; }
-        set { master = value; }
-    }
+		transform.Translate ( 0, 0, z );
 
-    void Start () {
-        gravity = 100;
-        onGround = false;
+		// Gravity
+		RaycastHit hit = new RaycastHit ();
+		if (Physics.Raycast ( transform.position, -transform.up, out hit, 10 )) {
+			distanceToGround = hit.distance;
+			groundNormal = hit.normal;
 
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+			onGround = (distanceToGround <= 0.1f) ? true : false;
+		}
 
-        planet = master.Planet;
-    }
+		Vector3 gravDirection = (transform.position - planet.transform.position).normalized;
 
-    void Update () {
-        // Movement
-        float z = Time.deltaTime * speed;
+		if (onGround == false) {
+			rb.AddForce ( gravDirection * -GRAVITY );
+		}
 
-        transform.Translate( 0, 0, z );
+		// Rotation
 
-        // Gravity
-        RaycastHit hit = new RaycastHit();
-        if ( Physics.Raycast( transform.position, -transform.up, out hit, 10 ) ) {
-            distanceToGround = hit.distance;
-            groundNormal = hit.normal;
+		// 惑星に向けて平行をとる
+		Quaternion toRotation = Quaternion.FromToRotation ( transform.up, groundNormal ) * transform.rotation;
+		transform.rotation = toRotation;
+	}
 
-            onGround = ( distanceToGround <= 0.1f ) ? true : false;
-        }
+	private void OnCollisionEnter ( Collision collision ) {
+		if (collision.gameObject.tag == "Player") {
+			Player p = collision.gameObject.GetComponent<Player> ();
+			if (p.TakeDamage == true) {
+				if (p != master) {
+					master.Score++;
+				}
 
-        Vector3 gravDirection = ( transform.position - planet.transform.position ).normalized;
+				p.Score--;
+			}
 
-        if ( onGround == false ) {
-            rb.AddForce( gravDirection * -gravity );
-        }
+			Destroy ( gameObject );
+		}
 
-        // Rotation
-
-        // 惑星に向けて平行をとる
-        Quaternion toRotation = Quaternion.FromToRotation( transform.up, groundNormal ) * transform.rotation;
-        transform.rotation = toRotation;
-    }
-
-    private void OnCollisionEnter ( Collision collision ) {
-        if ( collision.gameObject.tag == "Player" ) {
-            Player p = collision.gameObject.GetComponent<Player>();
-            if ( p.TakeDamage == true ) {
-                p.Hp--;
-                if ( p.Hp <= 0 ) {
-                    master.KilledPlayers.Enqueue( p.icon );
-                    p.DeathProc();
-                }
-            }
-
-            Destroy( gameObject );
-        }
-
-        if(collision.gameObject.tag == "Bullet" ) {
-            speed *= -1;
-        }
-    }
+		// 弾にぶつかると進む向きが反転
+		if (collision.gameObject.tag == "Bullet") {
+			speed *= -1;
+		}
+	}
 }
