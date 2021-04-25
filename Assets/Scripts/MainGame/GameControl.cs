@@ -1,33 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using TreeEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour {
-	[SerializeField] GameSetting gs;
-	[SerializeField] Player[] players;
+	[SerializeField] GameObject[] playerUIList;
 
+	// イントロ
 	[SerializeField] GameObject start;
 	[SerializeField] GameObject[] countNum;
 	[SerializeField] GameObject finish;
 	[SerializeField] GameObject result;
 	[SerializeField] GameObject pause;
-	Player winner;
+
 	static bool isPause;    // ポーズフラグ
 	static bool isStart;    // ゲーム開始フラグ
 	static bool isEnd;  // ゲーム終了フラグ
+
+	// 時間
+	[SerializeField] GameObject timerObj;
 	[SerializeField] float playTime;    // プレイ時間
 	float timer;
 	public float Timer {
 		get { return timer; }
 		set { timer = value; }
 	}
-	[SerializeField] Texture drawBanner;
+	[SerializeField] Texture[] numbers;
+	[SerializeField] RawImage[] timers;
 
 	// Start is called before the first frame update
 	void Start () {
 		timer = playTime;
+		timerObj.SetActive ( true );
 		start.SetActive ( false );
 		finish.SetActive ( false );
 		foreach (var c in countNum) {
@@ -39,14 +46,14 @@ public class GameControl : MonoBehaviour {
 		isPause = false;
 		isStart = false;
 		isEnd = false;
-		// プレイヤーの生成
-		for (int i = 0; i < gs.ButtonBinds.Length; i++) {
-			players[i].Data = gs.ButtonBinds[i];
+
+		foreach (var p in GameSetting.Players) {
+			p.GetComponent<Player> ().Gc = this;
 		}
 
 		// 星の生成
 		GameObject star;
-		switch (gs.Star) {
+		switch (GameSetting.Star) {
 			case GameSetting.Stars.Jimejime:
 				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
 				break;
@@ -62,15 +69,29 @@ public class GameControl : MonoBehaviour {
 				break;
 		}
 		star = Instantiate ( star, new Vector3 ( 0, 0, 0 ), Quaternion.identity );
-		foreach (Player temp in players) {
-			temp.Planet = star;
+
+		// プレイヤー設定
+		for (int i = 0; i < GameSetting.Players.ToArray ().Length; i++) {
+			var n = GameSetting.Players[i].GetComponent<PlayerInput> ().playerIndex;
+			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Players[i].GetComponent<Player> ();
+			playerUIList[n].SetActive ( true );
+			GameSetting.Players[i].GetComponent<Player> ().Planet = star;
+			GameSetting.Players[i].transform.position = new Vector3 ( i * 2, 5, 0 );
+			GameSetting.Players[i].GetComponent<Player> ().Reset ();
 		}
 	}
 
 	// Update is called once per frame
 	void Update () {
+		// タイマー
 		if (isStart == true && isEnd == false && isPause == false) {
 			timer -= Time.deltaTime;
+			var t = (int)timer;
+			for (int d = 0; d < timers.Length; d++) {
+				var n = t % 10;
+				timers[d].texture = numbers[n];
+				t /= 10;
+			}
 		}
 
 		if (timer < 0) {
@@ -78,33 +99,14 @@ public class GameControl : MonoBehaviour {
 		}
 
 		if (isEnd == true) {    // ゲーム終了したら
+			finish.SetActive ( true );
 			Invoke ( "EndProc", 1.0f );
 		}
 	}
 
 	void EndProc () {
-		winner = players[0];
-		bool draw = false;
-		foreach (Player p in players) {
-			if (winner != p) {
-				if (winner.Score == p.Score) {
-					draw = true;
-					break;
-				}
-
-				if (p.Score > winner.Score) {
-					winner = p;
-				}
-			}
-		}
-
-		if (draw == true) {
-			result.GetComponent<Result> ().SetWinnerTex ( drawBanner );
-		}
-		else {
-			result.GetComponent<Result> ().SetWinnerTex ( winner );
-		}
-
+		timerObj.SetActive ( false );
+		finish.SetActive ( false );
 		result.SetActive ( true );
 	}
 
@@ -122,9 +124,8 @@ public class GameControl : MonoBehaviour {
 
 	IEnumerator StartLogo () {
 		yield return new WaitForSeconds ( 0.01f );
-
-		foreach (Player temp in players) {
-			temp.DisableInput = true;
+		foreach (var p in GameSetting.Players) {
+			p.GetComponent<Player> ().DisableInput = true;
 		}
 
 		countNum[2].SetActive ( true );
@@ -144,8 +145,8 @@ public class GameControl : MonoBehaviour {
 		start.SetActive ( false );
 
 		isStart = true;
-		foreach (Player temp in players) {
-			temp.DisableInput = false;
+		foreach (var p in GameSetting.Players) {
+			p.GetComponent<Player> ().DisableInput = false;
 		}
 	}
 }

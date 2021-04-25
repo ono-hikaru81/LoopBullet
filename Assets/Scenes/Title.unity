@@ -872,6 +872,7 @@ GameObject:
   - component: {fileID: 538924295}
   - component: {fileID: 538924294}
   - component: {fileID: 538924298}
+  - component: {fileID: 538924299}
   m_Layer: 5
   m_Name: Option
   m_TagString: Untagged
@@ -960,7 +961,7 @@ RectTransform:
   - {fileID: 1276155151}
   - {fileID: 205999803}
   m_Father: {fileID: 964921034}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -979,8 +980,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9913dc8031b115847b6e458ede8f0053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ad: {fileID: 610573213}
   am: {fileID: 24100000, guid: 3b139984d425841418342367e92f96d8, type: 2}
+  previousScreen: {fileID: 1875817028}
   masterVol: {fileID: 2059974448}
   bgmVol: {fileID: 1971170720}
   seVol: {fileID: 1586598973}
@@ -993,6 +994,37 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 18c5a982b7bfaa24b92e2c73697a7935, type: 3}
   - {fileID: 2800000, guid: 997ab0c423a174d4c9f108424ad0145d, type: 3}
   - {fileID: 2800000, guid: 2564b8dbf0f45cb4798c39d04d62332f, type: 3}
+--- !u!114 &538924299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538924293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: dbf459f133a064544adbc0d9681dd711,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &555925838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,6 +1110,7 @@ GameObject:
   - component: {fileID: 590483060}
   - component: {fileID: 590483059}
   - component: {fileID: 590483063}
+  - component: {fileID: 590483064}
   m_Layer: 5
   m_Name: Connect
   m_TagString: Untagged
@@ -1163,7 +1196,7 @@ RectTransform:
   - {fileID: 963773060}
   - {fileID: 744587511}
   m_Father: {fileID: 964921034}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1193,6 +1226,69 @@ MonoBehaviour:
   - {fileID: 891879565}
   - {fileID: 73736502}
   - {fileID: 1260784818}
+  nextScreen: {fileID: 902104336}
+  previousScreen: {fileID: 1875817028}
+--- !u!114 &590483064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590483058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NotificationBehavior: 0
+  m_MaxPlayerCount: 4
+  m_AllowJoining: 1
+  m_JoinBehavior: 1
+  m_PlayerJoinedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_PlayerLeftEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_JoinAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Join
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 30ff6387-130e-4fed-b84e-c2a5052c0d1d
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 09e6be52-7b4b-4845-8c17-5a299648ef85
+        m_Path: <Gamepad>/buttonWest
+        m_Interactions: Press
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: f6cf627e-958a-473e-8cf2-90d18a08fbed
+        m_Path: <Keyboard>/z
+        m_Interactions: Press
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+    m_Reference: {fileID: -1810512494860375133, guid: dbf459f133a064544adbc0d9681dd711,
+      type: 3}
+  m_PlayerPrefab: {fileID: 4835817986068905295, guid: 4f232313a4e3e024dbce2a28588f9cf1,
+    type: 3}
+  m_SplitScreen: 1
+  m_MaintainAspectRatioInSplitScreen: 0
+  m_FixedNumberOfSplitScreens: -1
+  m_SplitScreenRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &610573210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,9 +1298,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 610573212}
-  - component: {fileID: 610573211}
-  - component: {fileID: 610573213}
   - component: {fileID: 610573214}
+  - component: {fileID: 610573211}
   m_Layer: 0
   m_Name: TitleManager
   m_TagString: Untagged
@@ -1221,21 +1316,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 610573210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 333975a927f858844b2b73b22e8788b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 139c601bc3bd465429ba1572dc9a88cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gs: {fileID: 1575308197}
-  ad: {fileID: 610573213}
   title: {fileID: 672098411}
   menu: {fileID: 1875817028}
-  connectRI: {fileID: 638668995}
-  optionRI: {fileID: 422513392}
   connect: {fileID: 590483058}
   option: {fileID: 538924293}
-  stage: {fileID: 902104336}
-  jimejimeRI: {fileID: 1839294281}
-  moonRI: {fileID: 116533159}
-  magmagRI: {fileID: 342445792}
+  selectStage: {fileID: 902104336}
 --- !u!4 &610573212
 Transform:
   m_ObjectHideFlags: 0
@@ -1250,21 +1338,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &610573213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610573210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31a6e3d7e57af64e95293ce73879e47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  axis:
-  - DHorizontal
-  - DVertical
 --- !u!82 &610573214
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1446,6 +1519,8 @@ GameObject:
   - component: {fileID: 672098414}
   - component: {fileID: 672098413}
   - component: {fileID: 672098412}
+  - component: {fileID: 672098417}
+  - component: {fileID: 672098416}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -1535,6 +1610,50 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 540}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &672098416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672098411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: dbf459f133a064544adbc0d9681dd711,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &672098417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672098411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64e6311da2344a4493265a095c56861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextScreen: {fileID: 1875817028}
 --- !u!1 &724833123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1916,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 902104337}
+  - component: {fileID: 902104339}
+  - component: {fileID: 902104338}
   m_Layer: 5
   m_Name: StageSelect
   m_TagString: Untagged
@@ -1827,6 +1948,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &902104338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902104336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: dbf459f133a064544adbc0d9681dd711,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &902104339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902104336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83561c7c1007d0648a74e7c511d58372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previousScreen: {fileID: 590483058}
+  jimejime: {fileID: 1839294281}
+  moon: {fileID: 116533159}
+  magmag: {fileID: 342445792}
 --- !u!1 &963773059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,8 +2126,8 @@ RectTransform:
   - {fileID: 352910006}
   - {fileID: 672098415}
   - {fileID: 1875817032}
-  - {fileID: 538924297}
   - {fileID: 590483062}
+  - {fileID: 538924297}
   - {fileID: 902104337}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -1996,16 +2164,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 1035455913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_PointAction: {fileID: 1054132383583890850, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_MoveAction: {fileID: 3710738434707379630, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_SubmitAction: {fileID: 2064916234097673511, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_CancelAction: {fileID: -1967631576421560919, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_LeftClickAction: {fileID: 8056856818456041789, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_MiddleClickAction: {fileID: 3279352641294131588, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_RightClickAction: {fileID: 3837173908680883260, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
 --- !u!114 &1035455915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2322,7 +2509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44f6ea3982fb9d4da26b0e86d3b6b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ad: {fileID: 610573213}
   select: {fileID: 2800000, guid: 671e255c0edc3a94599b5a1a3d2d4e88, type: 3}
   noSelect: {fileID: 2800000, guid: 9108f7cb69424514796b1e50ce97661b, type: 3}
   description: "\u753B\u9762\u306E\u660E\u308B\u3055\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002"
@@ -2330,6 +2516,7 @@ MonoBehaviour:
   begin: -550
   end: -100
   max: 10
+  currentValue: 5
 --- !u!114 &1187137602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2487,7 +2674,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44f6ea3982fb9d4da26b0e86d3b6b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ad: {fileID: 610573213}
   select: {fileID: 2800000, guid: 671e255c0edc3a94599b5a1a3d2d4e88, type: 3}
   noSelect: {fileID: 2800000, guid: 9108f7cb69424514796b1e50ce97661b, type: 3}
   description: "\u8272\u306E\u898B\u3048\u65B9\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002"
@@ -2495,6 +2681,7 @@ MonoBehaviour:
   begin: -550
   end: -100
   max: 4
+  currentValue: 0
 --- !u!114 &1276155153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2696,7 +2883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44f6ea3982fb9d4da26b0e86d3b6b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ad: {fileID: 610573213}
   select: {fileID: 2800000, guid: 671e255c0edc3a94599b5a1a3d2d4e88, type: 3}
   noSelect: {fileID: 2800000, guid: 9108f7cb69424514796b1e50ce97661b, type: 3}
   description: "SE\u306E\u97F3\u91CF\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002"
@@ -2704,6 +2890,7 @@ MonoBehaviour:
   begin: -550
   end: -100
   max: 10
+  currentValue: 10
 --- !u!114 &1586598974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3166,6 +3353,8 @@ GameObject:
   - component: {fileID: 1875817031}
   - component: {fileID: 1875817030}
   - component: {fileID: 1875817029}
+  - component: {fileID: 1875817034}
+  - component: {fileID: 1875817033}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -3257,6 +3446,54 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 540}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1875817033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875817028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: dbf459f133a064544adbc0d9681dd711,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &1875817034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875817028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b8397363915b34689b27fba8f3fc22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectScreen: {fileID: 590483058}
+  optionScreen: {fileID: 538924293}
+  previousScreen: {fileID: 672098411}
+  battle: {fileID: 638668995}
+  option: {fileID: 422513392}
 --- !u!1 &1911712252
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,7 +3616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44f6ea3982fb9d4da26b0e86d3b6b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ad: {fileID: 610573213}
   select: {fileID: 2800000, guid: 671e255c0edc3a94599b5a1a3d2d4e88, type: 3}
   noSelect: {fileID: 2800000, guid: 9108f7cb69424514796b1e50ce97661b, type: 3}
   description: "BGM\u306E\u97F3\u91CF\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002"
@@ -3387,6 +3623,7 @@ MonoBehaviour:
   begin: -550
   end: -100
   max: 10
+  currentValue: 10
 --- !u!114 &1971170721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3579,7 +3816,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44f6ea3982fb9d4da26b0e86d3b6b7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ad: {fileID: 610573213}
   select: {fileID: 2800000, guid: 671e255c0edc3a94599b5a1a3d2d4e88, type: 3}
   noSelect: {fileID: 2800000, guid: 9108f7cb69424514796b1e50ce97661b, type: 3}
   description: "\u3059\u3079\u3066\u306E\u97F3\u91CF\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002"
@@ -3587,6 +3823,7 @@ MonoBehaviour:
   begin: -550
   end: -100
   max: 10
+  currentValue: 10
 --- !u!1 &2125368688
 GameObject:
   m_ObjectHideFlags: 0

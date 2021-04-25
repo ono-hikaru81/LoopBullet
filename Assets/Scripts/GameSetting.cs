@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Versioning;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameSetting : MonoBehaviour {
 	public enum Stars {
@@ -10,62 +13,32 @@ public class GameSetting : MonoBehaviour {
 		Magmag,
 	};
 	static Stars star;
-	public Stars Star {
+	static public Stars Star {
 		get { return star; }
 		set { star = value; }
 	}
-
-	public enum Scenes {
-		Title,
-		Menu,
-		Option,
-		Connect,
-		Stage,
-	};
-	static Scenes scene = Scenes.Title;
-	public Scenes Scene {
-		get { return scene; }
-		set { scene = value; }
-	}
+	static TitleManager.Screens sceneToLoad = TitleManager.Screens.Title;
+	public static TitleManager.Screens SceneToLoad { get => sceneToLoad; set => sceneToLoad = value; }
 
 	[HideInInspector] public const int MAX_PLAYER = 4;
 
-	public struct PlayerData {
-		bool join;
-		public bool Join {
-			get { return join; }
-			set { join = value; }
-		}
-		string horizontal;
-		public string Horizontal {
-			get { return horizontal; }
-			set { horizontal = value; }
-		}
-		string vertical;
-		public string Vertical {
-			get { return vertical; }
-			set { vertical = value; }
-		}
-		string shot;
-		public string Shot {
-			get { return shot; }
-			set { shot = value; }
-		}
-		string item;
-		public string Item {
-			get { return item; }
-			set { item = value; }
-		}
-	}
-	static PlayerData[] buttonBinds = new PlayerData[MAX_PLAYER];
-	public PlayerData[] ButtonBinds {
-		get { return buttonBinds; }
-		set { buttonBinds = value; }
-	}
+	static List<GameObject> players = new List<GameObject> ();
+	public static List<GameObject> Players { get => players; set => players = value; }
+
+	static Material[] playerMaterials = new Material[MAX_PLAYER];
+	public static Material[] PlayerMaterials { get => playerMaterials; set => playerMaterials = value; }
+	static Texture[] playerIcons = new Texture[MAX_PLAYER];
+	public static Texture[] PlayerIcons { get => playerIcons; set => playerIcons = value; }
+	static Texture[] playerNumbers = new Texture[MAX_PLAYER];
+	public static Texture[] PlayerNumbers { get => playerNumbers; set => playerNumbers = value; }
 
 	// Start is called before the first frame update
 	void Start () {
-
+		for (int i = 0; i < MAX_PLAYER; i++) {
+			playerMaterials[i] = (Material)Resources.Load ( "Prefabs/Actor/Materials/" + (i + 1).ToString () + "P" );
+			playerIcons[i] = (Texture)Resources.Load ( "Prefabs/Actor/Icons/" + (i + 1).ToString () + "P" );
+			playerNumbers[i] = (Texture)Resources.Load ( "Prefabs/Actor/" + (i + 1).ToString () + "P" );
+		}
 	}
 
 	// Update is called once per frame
@@ -73,14 +46,11 @@ public class GameSetting : MonoBehaviour {
 
 	}
 
-	public int GetJoinedPlayers () {
-		int t = 0;
-		foreach (PlayerData temp in buttonBinds) {
-			if (temp.Join == true) {
-				t++;
-			}
+	static public void SetPlayerMaterial () {
+		for (int i = 0; i < players.Count; i++) {
+			var p = players.ToList ();
+			p.Reverse ();
+			p[i].GetComponent<MeshRenderer> ().material = playerMaterials[i];
 		}
-
-		return t;
 	}
 }

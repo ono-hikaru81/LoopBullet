@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Result : MonoBehaviour {
-	[SerializeField] AxisDown ad;
-	[SerializeField] GameSetting gs;
-	[SerializeField] RawImage winnerBanner;   // 勝利プレイヤーを表示
 	[SerializeField] GameObject menu; // リザルトメニュー
 	[SerializeField] RawImage again;    // もう一度プレイ
 	[SerializeField] RawImage stage;    // ステージ選択
@@ -15,6 +14,9 @@ public class Result : MonoBehaviour {
 	RawImage[] menus;
 	int currentSelect;
 	bool showMenu;
+	[SerializeField] RawImage[] iconFrames;
+	[SerializeField] RawImage[] numbers;
+	[SerializeField] Score[] scoreUIs;
 
 	// Start is called before the first frame update
 	void Start () {
@@ -28,63 +30,81 @@ public class Result : MonoBehaviour {
 
 		showMenu = false;
 		menu.SetActive ( false );
+
+		foreach (RawImage temp in menus) {
+			temp.color = new Color ( 0.5f, 0.5f, 0.5f );
+		}
+
+		menus[currentSelect].color = new Color ( 1.0f, 1.0f, 1.0f );
+
+		// スコア順に並べる
+		var p = new List<Player> ();
+		foreach (GameObject o in GameSetting.Players) {
+			p.Add ( o.GetComponent<Player> () );
+		}
+
+		p = p.OrderBy ( x => x.Score ).ToList ();
+		p.Reverse ();
+
+		for (int i = 0; i < p.Count; i++) {
+			var n = p[i].GetComponent<PlayerInput> ().playerIndex;
+			iconFrames[i].texture = GameSetting.PlayerIcons[n];
+			numbers[i].texture = GameSetting.PlayerNumbers[n];
+			scoreUIs[i].UpdateUI ( p[i] );
+		}
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (showMenu == false) {
-			if (Input.GetButtonDown ( "Enter" )) {
-				showMenu = true;
-				menu.SetActive ( true );
+
+	}
+
+	// ----------------入力--------------------
+	public void OnSelect ( InputValue value ) {
+		var a = value.Get<Vector2> ();
+		if (a.y != 0) {
+			if (showMenu == true) {
+				currentSelect += (a.y == -1) ? 1 : -1;
+
+				currentSelect = UIFunctions.RevisionValue ( currentSelect, menus.Length - 1 );
+
+				// 選択中の項目のみ強調
+				foreach (RawImage temp in menus) {
+					temp.color = new Color ( 0.5f, 0.5f, 0.5f );
+				}
+
+				menus[currentSelect].color = new Color ( 1.0f, 1.0f, 1.0f );
 			}
+		}
+	}
+
+	public void OnEnter () {
+		if (showMenu == false) {
+			// メニュー表示
+			showMenu = true;
+			menu.SetActive ( true );
 		}
 		else {
-			// 項目移動
-			float axis = ad.GetAxisDown ( "DVertical" );
-			// 上
-			if (axis >= 1) {
-				currentSelect--;
-				if (currentSelect < 0) {
-					currentSelect = 0;
-				}
+			// そのシーンへ
+			if (menus[currentSelect] == again) {
+				SceneManager.LoadScene ( "MainGame" );
 			}
-			// 下
-			else if (axis <= -1) {
-				currentSelect++;
-				if (currentSelect >= menus.Length) {
-					currentSelect = menus.Length - 1;
-				}
+			else if (menus[currentSelect] == stage) {
+				SceneManager.LoadScene ( "Title" );
+				GameSetting.SceneToLoad = TitleManager.Screens.SelectStage;
 			}
-
-			// 選択中の項目の処理
-			if (Input.GetButtonDown ( "Enter" )) {
-				if (menus[currentSelect] == again) {
-					SceneManager.LoadScene ( "MainGame" );
-				}
-				else if (menus[currentSelect] == stage) {
-					gs.Scene = GameSetting.Scenes.Stage;
-					SceneManager.LoadScene ( "Title" );
-				}
-				else if (menus[currentSelect] == title) {
-					gs.Scene = GameSetting.Scenes.Title;
-					SceneManager.LoadScene ( "Title" );
-				}
+			else if (menus[currentSelect] == title) {
+				SceneManager.LoadScene ( "Title" );
+				GameSetting.SceneToLoad = TitleManager.Screens.Title;
 			}
-
-			// 選択中の項目のみ強調
-			foreach (RawImage temp in menus) {
-				temp.color = new Color ( 0.5f, 0.5f, 0.5f );
-			}
-
-			menus[currentSelect].color = new Color ( 1.0f, 1.0f, 1.0f );
 		}
 	}
 
-	public void SetWinnerTex ( Player winner ) {
-		winnerBanner.texture = winner.WinBanner;
-	}
-
-	public void SetWinnerTex ( Texture banner ) {
-		winnerBanner.texture = banner;
+	public void OnBack () {
+		if (showMenu == true) {
+			// メニュー表示
+			showMenu = false;
+			menu.SetActive ( false );
+		}
 	}
 }

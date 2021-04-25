@@ -97,8 +97,9 @@ GameObject:
   - component: {fileID: 3376498129933583556}
   - component: {fileID: 4112951577675266289}
   - component: {fileID: 6216803208602823676}
+  - component: {fileID: 4717688411075410208}
   m_Layer: 0
-  m_Name: Actor
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197,18 +198,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae5a58ad7a4eea45be7de8b86cd1a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gc: {fileID: 0}
   planet: {fileID: 0}
   speed: 1.5
-  axisX: 
-  axisY: 
-  shot: 
-  maxHp: 3
   maxMagazine: 5
   bullet: {fileID: 7249405934146716635, guid: 90d10d8a6ef9e7d42abf71d909adf20d, type: 3}
   maxFieldBullet: 5
   shotInterval: 0.5
   reloadInterval: 3
-  gc: {fileID: 0}
   icon: {fileID: 0}
 --- !u!65 &6216803208602823676
 BoxCollider:
@@ -223,3 +220,34 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.52806985, y: 0.53435314, z: 0.19747022}
   m_Center: {x: 0.0039895624, y: 0.26759684, z: 0.006142378}
+--- !u!114 &4717688411075410208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4835817986068905295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: dbf459f133a064544adbc0d9681dd711,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 5508084242675992994}

@@ -1,67 +1,79 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Connect : MonoBehaviour {
-	[SerializeField] GameSetting gs;
 	[SerializeField] GameObject[] icons;
-	[SerializeField] GameObject[] unconnecteds;
-	GameSetting.PlayerData[] binds;
+
+	// 入力
+	PlayerInputManager playerInputManager;
+	bool enterRelease;
+	bool backRelease;
 
 	// Start is called before the first frame update
 	void Start () {
-		{
-			string h = "Horizontal";
-			string v = "Vertical";
-			string s = "Shot";
-			string i = "Item";
-			System.Array.Resize ( ref binds, 4 );
-			for (int p = 1; p < 5; p++) {
-				string n = p.ToString ();
-				binds[p - 1] = new GameSetting.PlayerData () { Join = false, Horizontal = h + n, Vertical = v + n, Shot = s + n, Item = i + n };
-			}
-		}
-
-		for (int i = 0; i < gs.ButtonBinds.Length; i++) {
-			if (gs.ButtonBinds[i].Join == true) {
-				icons[i].SetActive ( true );
-				unconnecteds[i].SetActive ( false );
-			}
-			else {
-				icons[i].SetActive ( false );
-				unconnecteds[i].SetActive ( true );
-			}
-
-			if (gs.GetJoinedPlayers () == 0) {
-				gs.ButtonBinds[i] = binds[i];
-			}
-		}
+		playerInputManager = GetComponent<PlayerInputManager> ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown ( "Connect1" )) {
-			Entry ( 0 );
+		// 長押し対策
+		if (CanReleasedEnter ()) {
+			enterRelease = true;
+		}
+		else if (CanReleasedBack ()) {
+			backRelease = true;
 		}
 
-		if (Input.GetButtonDown ( "Connect2" )) {
-			Entry ( 1 );
+		playerInputManager.EnableJoining ();
+
+		// UIの更新
+		var players = FindObjectsOfType<Player> ();
+		foreach (var i in icons) {
+			i.SetActive ( false );
 		}
 
-		if (Input.GetButtonDown ( "Connect3" )) {
-			Entry ( 2 );
+		for (int n = 0; n < players.Length; n++) {
+			var i = players[n].GetComponent<PlayerInput> ().playerIndex;
+			icons[i].SetActive ( true );
 		}
 
-		if (Input.GetButtonDown ( "Connect4" )) {
-			Entry ( 3 );
+		// 接続するとPlayerInputが使えなくなるので手動
+		if (CanPressedEnter () && players.Length > 0) {
+			GameSetting.Players = new List<GameObject> ();
+			foreach (var p in players) {
+				GameSetting.Players.Add ( p.gameObject );
+				DontDestroyOnLoad ( p.gameObject );
+			}
+
+			enterRelease = false;
+			backRelease = false;
+
+			TitleManager.ChangeScreen ( TitleManager.Screens.SelectStage );
+		}
+		else if (CanPressedBack ()) {
+			foreach (var p in players) {
+				Destroy ( p.gameObject );
+			}
+
+			enterRelease = false;
+			backRelease = false;
+
+			TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
 		}
 	}
 
-	void Entry ( int num ) {
-		bool j = gs.ButtonBinds[num].Join;
-		gs.ButtonBinds[num].Join = !j;
-		icons[num].SetActive ( !j );
-		unconnecteds[num].SetActive ( j );
-	}
+	bool CanReleasedEnter () => Keyboard.current.cKey.wasReleasedThisFrame || Gamepad.current.buttonEast.wasReleasedThisFrame;
+	bool CanReleasedBack () => Keyboard.current.xKey.wasReleasedThisFrame || Gamepad.current.buttonSouth.wasReleasedThisFrame;
+
+	bool CanPressedEnter () => (Keyboard.current.cKey.isPressed || Gamepad.current.buttonEast.isPressed) && enterRelease;
+
+	bool CanPressedBack () => (Keyboard.current.xKey.isPressed || Gamepad.current.buttonSouth.isPressed) && backRelease;
 }

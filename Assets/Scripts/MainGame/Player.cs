@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour {
 	Rigidbody rb;
-	[SerializeField] GameControl gc;
+	GameControl gc;
+	public GameControl Gc { get => gc; set => gc = value; }
 	BoxCollider bc;
 	MeshRenderer mr;
 	GameObject planet;  // 重力を受ける星
@@ -41,24 +43,14 @@ public class Player : MonoBehaviour {
 		get { return takeDamage; }
 		set { takeDamage = value; }
 	}
-	[SerializeField] Texture icon;
-	public Texture Icon {
-		get { return icon; }
-	}
-	[SerializeField] Texture winBanner;
-	public Texture WinBanner {
-		get { return winBanner; }
-	}
-	GameSetting.PlayerData data;    // プレイヤーデータ
-	public GameSetting.PlayerData Data {
-		get { return data; }
-		set { data = value; }
-	}
 	int score;
 	public int Score {
 		get { return score; }
 		set { score = value; }
 	}
+
+	// 入力
+	Vector2 axis;
 
 	void Start () {
 		bc = GetComponent<BoxCollider> ();
@@ -72,19 +64,18 @@ public class Player : MonoBehaviour {
 		disableInput = false;
 		takeDamage = true;
 		rb.freezeRotation = true;
-		if (data.Join == false) {
-			DeathProc ();
-		}
 		score = 0;
 	}
 
 	void Update () {
+		if (planet == null) return;
+
 		// Movement
 		float x = 0;
 		float z = 0;
 		if (disableInput == false) {
-			x = Input.GetAxis ( data.Horizontal ) * Time.deltaTime * speed;
-			z = Input.GetAxis ( data.Vertical ) * Time.deltaTime * -speed;
+			x = axis.x * Time.deltaTime * speed;
+			z = axis.y * Time.deltaTime * -speed;
 		}
 
 		transform.Translate ( x, 0, z );
@@ -106,32 +97,14 @@ public class Player : MonoBehaviour {
 
 		// Rotate
 		if (disableInput == false) {
-			float y = Input.GetAxis ( data.Horizontal ) * 150 * Time.deltaTime;
+			float y = axis.x * 150 * Time.deltaTime;
 			transform.Rotate ( 0, y, 0 );
 		}
 
-		// 惑星に向けて平行をとる
-		Quaternion toRotation = Quaternion.FromToRotation ( transform.up, groundNormal ) * transform.rotation;
-		transform.rotation = toRotation;
+		ParallelToPlanet ();
 
 		// Shot
 		shotCooldown -= Time.deltaTime;
-
-		if (Input.GetButtonDown ( data.Shot ) && disableInput == false) {
-			if (magazine > 0 && shotCooldown <= 0) {
-				Vector3 shotPos = transform.position + transform.forward * 0.7f;
-				GameObject b = Instantiate ( bullet, shotPos, transform.rotation );
-				b.GetComponent<Bullet> ().Master = this;
-				fieldBullets.Enqueue ( b );
-				if (fieldBullets.Count > maxFieldBullet) {
-					Destroy ( fieldBullets.Dequeue () );
-				}
-
-				magazine--;
-				onReload = false;
-				shotCooldown = shotInterval;
-			}
-		}
 
 		// Reload
 		if (onReload == true) {
@@ -149,14 +122,12 @@ public class Player : MonoBehaviour {
 				onReload = true;
 			}
 		}
+	}
 
-		// Pause
-		if (Input.GetButtonDown ( "Start" )) {
-			gc.Pause ( true );
-		}
-		else if (Input.GetButtonDown ( "Cancel" )) {
-			gc.Pause ( false );
-		}
+	// 惑星に向けて平行をとる
+	public void ParallelToPlanet () {
+		Quaternion toRotation = Quaternion.FromToRotation ( transform.up, groundNormal ) * transform.rotation;
+		transform.rotation = toRotation;
 	}
 
 	public void DeathProc () {
@@ -165,5 +136,49 @@ public class Player : MonoBehaviour {
 		disableInput = true;
 		takeDamage = false;
 		rb.constraints = RigidbodyConstraints.FreezePosition;
+	}
+
+	public void Reset () {
+		magazine = maxMagazine;
+		shotCooldown = shotInterval;
+		fieldBullets = new Queue<GameObject> ();
+		score = 0;
+	}
+
+	// ------------入力-----------------
+	public void OnMove ( InputValue value ) {
+		axis = value.Get<Vector2> ();
+		axis.y *= -1;
+	}
+
+	public void OnShot ( InputValue value ) {
+		if (value.Get<float> () == 1) {
+			if (disableInput == true) return;
+			if (magazine <= 0 || shotCooldown > 0) return;
+
+			Vector3 shotPos = transform.position + transform.forward * 0.7f;
+			GameObject b = Instantiate ( bullet, shotPos, transform.rotation );
+			b.GetComponent<Bullet> ().Master = this;
+			fieldBullets.Enqueue ( b );
+			if (fieldBullets.Count > maxFieldBullet) {
+				Destroy ( fieldBullets.Dequeue () );
+			}
+
+			magazine--;
+			onReload = false;
+			shotCooldown = shotInterval;
+		}
+	}
+
+	public void OnPause () {
+		Gc.Pause ( true );
+	}
+
+	public void OnItem () {
+		// アイテムの使用処理
+	}
+
+	public void OnBack () {
+		Gc.Pause ( false );
 	}
 }
