@@ -13,6 +13,12 @@ public class StatusUI : MonoBehaviour {
 	[SerializeField] Texture bulletEmpty;
 	[SerializeField] RawImage result;
 
+	Texture itemValue;
+	[SerializeField] Texture radar;
+	[SerializeField] Texture speedBullet;
+	[SerializeField] Texture heavyBullet;
+	[SerializeField] Texture boots;
+	[SerializeField] Texture slowTimer;
 	// Start is called before the first frame update
 	void Start () {
 		Color c = result.color;
@@ -26,6 +32,44 @@ public class StatusUI : MonoBehaviour {
 		score.UpdateUI ( player );
 
 		// Item
+		for (int i = 0; i < GameSetting.Players.ToArray().Length; i++) {
+			if (GameSetting.Players[i] != null) {
+				if (GameSetting.Players[i].GetComponent<Player>().UsableRadar == true) {
+					itemValue = radar;
+				}
+				else {
+					itemValue = null;
+				}
+
+				if (GameSetting.Players[i].GetComponent<Player>().UsableSpdBullet == true) {
+					itemValue = speedBullet;
+				}
+				else {
+					itemValue = null;
+				}
+
+				if (GameSetting.Players[i].GetComponent<Player>().UsableHevBullet == true) {
+					itemValue = heavyBullet;
+				}
+				else {
+					itemValue = null;
+				}
+
+				if (GameSetting.Players[i].GetComponent<Player>().UsableBoots == true) {
+					itemValue = boots;
+				}
+				else {
+					itemValue = null;
+				}
+
+				if (GameSetting.Players[i].GetComponent<Player>().UsableSlowTimer == true) {
+					itemValue = slowTimer;
+				}
+				else {
+					itemValue = null;
+				}
+			}
+		}
 
 		// Bullet
 		foreach (RawImage temp in magazine) {

@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SlowTimer : MonoBehaviour
+{
+    [SerializeField] GameObject bullet;
+    [SerializeField] float deceleratedPlayerSpeed;
+    [SerializeField] float deceleratedBulletSpeed;
+    float timer;
+    [SerializeField] float timeLimit;
+
+    void Start() {
+        timer = 0.0f;
+    }
+
+    void Update() {
+        for(int i = 0; i < GameSetting.Players.ToArray().Length; i++) {
+            if (GameSetting.Players != null) {
+                if (GameSetting.Players[i].GetComponent<Player>().IsStartedSlowTimer == true) {
+                    timer += Time.deltaTime;
+                    foreach (GameObject temp in GameSetting.Players) {
+                        temp.GetComponent<Player>().Speed = deceleratedPlayerSpeed;
+                    }
+                    GameSetting.Players[i].GetComponent<Player>().Speed = GameSetting.Players[i].GetComponent<Player>().BaseSpeed;
+                    bullet.GetComponent<Bullet>().Speed = deceleratedBulletSpeed;
+                    GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+                    foreach (GameObject temp in bullets) {
+                        temp.GetComponent<Bullet>().Speed = deceleratedBulletSpeed;
+                    }
+                }
+
+                if(timer >= timeLimit) {
+                    GameSetting.Players[i].GetComponent<Player>().IsStartedSlowTimer = false;
+                    foreach (GameObject temp in GameSetting.Players) {
+                        temp.GetComponent<Player>().Speed = deceleratedPlayerSpeed;
+                    }
+                    bullet.GetComponent<Bullet>().Speed = bullet.GetComponent<Bullet>().BaseSpeed;
+                    GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+                    foreach (GameObject temp in bullets) {
+                        temp.GetComponent<Bullet>().Speed = temp.GetComponent<Bullet>().BaseSpeed;
+                    }
+                    timer = 0.0f;
+                }
+            }
+        }
+    }
+}

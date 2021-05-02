@@ -24,6 +24,8 @@ public class GameSetting : MonoBehaviour {
 
 	static List<GameObject> players = new List<GameObject> ();
 	public static List<GameObject> Players { get => players; set => players = value; }
+	static List<GameObject> cameras = new List<GameObject>();
+	public static List<GameObject> Cameras { get => cameras; set => cameras = value; }
 
 	static Material[] playerMaterials = new Material[MAX_PLAYER];
 	public static Material[] PlayerMaterials { get => playerMaterials; set => playerMaterials = value; }

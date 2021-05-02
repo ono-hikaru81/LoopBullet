@@ -14,7 +14,15 @@ public class Player : MonoBehaviour {
 		get { return planet; }
 		set { planet = value; }
 	}
-	[SerializeField] float speed;
+	float speed;
+	public float Speed {
+		get { return speed; }
+		set { speed = value; }
+	}
+	[SerializeField] float baseSpeed;
+	public float BaseSpeed { 
+		get { return baseSpeed; }
+	}
 	const float GRAVITY = 100;
 	bool onGround;
 	float distanceToGround; // 地面との距離
@@ -26,6 +34,8 @@ public class Player : MonoBehaviour {
 		set { magazine = value; }
 	}
 	[SerializeField] GameObject bullet; // 撃ち出す弾
+	[SerializeField] GameObject speedBullet;
+	[SerializeField] GameObject heavyBullet;
 	Queue<GameObject> fieldBullets;
 	[SerializeField] int maxFieldBullet;    // フィールドに存在できる弾の最大数
 	[SerializeField] float shotInterval;  // 射撃間隔
@@ -49,6 +59,54 @@ public class Player : MonoBehaviour {
 		set { score = value; }
 	}
 
+	// アイテム
+	bool isHitItemBox;
+	public bool IsHitItemBox {
+		get { return isHitItemBox; }
+		set { isHitItemBox = value; }
+	}
+	bool usableRadar;
+	public bool UsableRadar
+	{
+		get { return usableRadar; }
+		set { usableRadar = value; }
+	}
+	bool usableSpdBullet;
+	public bool UsableSpdBullet {
+		get { return usableSpdBullet; }
+		set { usableSpdBullet = value; }
+	}
+	bool usableHevBullet;
+	public bool UsableHevBullet {
+		get { return usableHevBullet; }
+		set { usableHevBullet = value; }
+	}
+	bool usableBoots;
+	public bool UsableBoots {
+		get { return usableBoots; }
+		set { usableBoots = value; }
+	}
+	bool usableSlowTimer;
+	public bool UsableSlowTimer {
+		get { return usableSlowTimer; }
+		set { usableSlowTimer = value; }
+	}
+	bool isSpeedUp;
+	public bool IsSpeedUp {
+		get { return isSpeedUp; }
+		set { isSpeedUp = value; }
+	}
+	bool isStartedSlowTimer;
+	public bool IsStartedSlowTimer {
+		get { return isStartedSlowTimer; }
+		set { isStartedSlowTimer = value; }
+	}
+	bool isStartedRadar;
+	public bool IsStartedRadar {
+		get { return isStartedRadar; }
+		set { isStartedRadar = value; }
+	}
+
 	// 入力
 	Vector2 axis;
 
@@ -57,6 +115,7 @@ public class Player : MonoBehaviour {
 		mr = GetComponent<MeshRenderer> ();
 		rb = GetComponent<Rigidbody> ();
 		fieldBullets = new Queue<GameObject> ();
+		speed = baseSpeed;
 		onGround = false;
 		magazine = maxMagazine;
 		onReload = false;
@@ -65,6 +124,12 @@ public class Player : MonoBehaviour {
 		takeDamage = true;
 		rb.freezeRotation = true;
 		score = 0;
+		isHitItemBox = false;
+		usableRadar = false;
+		usableSpdBullet = false;
+		usableHevBullet = false;
+		usableBoots = false;
+		usableSlowTimer = false;
 	}
 
 	void Update () {
@@ -174,11 +239,47 @@ public class Player : MonoBehaviour {
 		Gc.Pause ( true );
 	}
 
-	public void OnItem () {
-		// アイテムの使用処理
+	public void OnItem ( InputValue value ) {
+		if(value.Get<float> () == 1) {
+			if (disableInput == true) return;
+			if (usableRadar == true) {
+				usableRadar = false;
+				isStartedRadar = true;
+			}
+			else if (usableSpdBullet == true) {
+				Vector3 shotPos = transform.position + transform.forward * 0.5f;
+				GameObject b = Instantiate(speedBullet, shotPos, transform.rotation);
+				b.GetComponent<Bullet>().Master = this;
+				fieldBullets.Enqueue(b);
+				usableSpdBullet = false;
+			}
+			else if (usableHevBullet == true) {
+				Vector3 shotPos = transform.position + transform.forward * 0.5f;
+				GameObject b = Instantiate(heavyBullet, shotPos, transform.rotation);
+				b.GetComponent<Bullet>().Master = this;
+				fieldBullets.Enqueue(b);
+				usableHevBullet = false;
+			}
+			else if (usableBoots == true) {
+				usableBoots = false;
+				isSpeedUp = true;
+			}
+			else if (usableSlowTimer == true) {
+				usableSlowTimer = false;
+				isStartedSlowTimer = true;
+			}
+		}
 	}
 
 	public void OnBack () {
 		Gc.Pause ( false );
+	}
+
+	private void OnCollisionEnter( Collision collision) {
+		if(collision.gameObject.tag == "Item") {
+			if ((usableRadar == true) || (usableSpdBullet == true) || (usableSpdBullet == true) ||
+				(usableBoots == true) || (usableSlowTimer == true)) return;
+			isHitItemBox = true;
+		}
 	}
 }

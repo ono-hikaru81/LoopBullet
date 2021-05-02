@@ -63,7 +63,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 759
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -198,15 +198,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae5a58ad7a4eea45be7de8b86cd1a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gc: {fileID: 0}
-  planet: {fileID: 0}
-  speed: 1.5
+  baseSpeed: 1.5
   maxMagazine: 5
-  bullet: {fileID: 7249405934146716635, guid: 90d10d8a6ef9e7d42abf71d909adf20d, type: 3}
+  bullet: {fileID: 4299288593453557449, guid: 90d10d8a6ef9e7d42abf71d909adf20d, type: 3}
+  speedBullet: {fileID: 8733953222423275824, guid: 5002388b9539b834b8de2129992323eb,
+    type: 3}
+  heavyBullet: {fileID: 7912759678887324745, guid: 1103e2cdfdbb87c4caac6a1d2ee472a5,
+    type: 3}
   maxFieldBullet: 5
   shotInterval: 0.5
   reloadInterval: 3
-  icon: {fileID: 0}
 --- !u!65 &6216803208602823676
 BoxCollider:
   m_ObjectHideFlags: 0

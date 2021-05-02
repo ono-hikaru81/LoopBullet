@@ -564,6 +564,11 @@ GameObject:
   m_Component:
   - component: {fileID: 188998716}
   - component: {fileID: 188998715}
+  - component: {fileID: 188998717}
+  - component: {fileID: 188998718}
+  - component: {fileID: 188998721}
+  - component: {fileID: 188998719}
+  - component: {fileID: 188998720}
   m_Layer: 0
   m_Name: GameControl
   m_TagString: Untagged
@@ -597,7 +602,7 @@ MonoBehaviour:
   result: {fileID: 1189351002}
   pause: {fileID: 1403454469}
   timerObj: {fileID: 800870841}
-  playTime: 10
+  playTime: 100
   numbers:
   - {fileID: 2800000, guid: 79d77a44673c2c14f81b46f9ca04a298, type: 3}
   - {fileID: 2800000, guid: 8b316f0116c4bfe4eafa3ca2419c1cdf, type: 3}
@@ -627,6 +632,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &188998717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188998714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c1a30c9b88b76498aa8488891ca25d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &188998718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188998714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b59bf846d07fa7418204fcbc97a7f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemBox: {fileID: 9083882253009694658, guid: ab1edb0e4f55b3448a7753474e84851e, type: 3}
+  intervalTime: 3
+--- !u!114 &188998719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188998714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c56ecd2b3b1a564b95b1f9fe5aef4e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceleratedPlayerSpeed: 4
+  timeLimit: 10
+--- !u!114 &188998720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188998714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d25bf7b5a67a3349921b9f3dd8094e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 4299288593453557449, guid: 90d10d8a6ef9e7d42abf71d909adf20d, type: 3}
+  deceleratedPlayerSpeed: 1
+  deceleratedBulletSpeed: 1.5
+  timeLimit: 10
+--- !u!114 &188998721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188998714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe9d85445466824d9cd1b4e8ed0de7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLimit: 20
 --- !u!1 &224937574
 GameObject:
   m_ObjectHideFlags: 0
@@ -5547,9 +5621,34 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 161963079346563585, guid: 95aea2b3aec873248b7130c207e1ae2c,
         type: 3}
+      propertyPath: boots
+      value: 
+      objectReference: {fileID: 2800000, guid: ea276811793b43a438c281cecea3b5ad, type: 3}
+    - target: {fileID: 161963079346563585, guid: 95aea2b3aec873248b7130c207e1ae2c,
+        type: 3}
+      propertyPath: radar
+      value: 
+      objectReference: {fileID: 2800000, guid: d77456c789305b44b87167e01e47ac19, type: 3}
+    - target: {fileID: 161963079346563585, guid: 95aea2b3aec873248b7130c207e1ae2c,
+        type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 161963079346563585, guid: 95aea2b3aec873248b7130c207e1ae2c,
+        type: 3}
+      propertyPath: slowTimer
+      value: 
+      objectReference: {fileID: 2800000, guid: 0efc644a0b8486a4ea2fb337c172a6e4, type: 3}
+    - target: {fileID: 161963079346563585, guid: 95aea2b3aec873248b7130c207e1ae2c,
+        type: 3}
+      propertyPath: heavyBullet
+      value: 
+      objectReference: {fileID: 2800000, guid: 1a7dfd28aef2dce42b2310c9f3f3cdef, type: 3}
+    - target: {fileID: 161963079346563585, guid: 95aea2b3aec873248b7130c207e1ae2c,
+        type: 3}
+      propertyPath: speedBullet
+      value: 
+      objectReference: {fileID: 2800000, guid: bbdf5baf29013e044ad046a337ff430b, type: 3}
     - target: {fileID: 161963079346563586, guid: 95aea2b3aec873248b7130c207e1ae2c,
         type: 3}
       propertyPath: m_Pivot.x

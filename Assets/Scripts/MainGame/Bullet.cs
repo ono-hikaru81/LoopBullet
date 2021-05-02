@@ -6,7 +6,15 @@ using UnityEngine.SocialPlatforms.Impl;
 public class Bullet : MonoBehaviour {
 	GameObject planet;  // 重力を受ける星
 	public GameObject Planet { get => planet; set => planet = value; }
-	[SerializeField] float speed;
+	float speed;
+	public float Speed {
+		get { return speed; }
+		set { speed = value; }
+	}
+	[SerializeField] float baseSpeed;
+	public float BaseSpeed {
+		get { return baseSpeed; }
+	}
 	const float GRAVITY = 100;
 	bool onGround;
 	float distanceToGround; // 地面からの距離
@@ -19,6 +27,8 @@ public class Bullet : MonoBehaviour {
 	ShowScore showScore;
 
 	void Start () {
+		speed = baseSpeed;
+
 		showScore = GameObject.Find ( "ScoreMng" ).GetComponent<ShowScore> ();
 		onGround = false;
 
