@@ -16,11 +16,11 @@ public class Radar : MonoBehaviour
             if(GameSetting.Players[i] != null) {
                 if(GameSetting.Players[i].GetComponent<Player>().IsStartedRadar == true) {
                     timer += Time.deltaTime;
-                    Camera camera = GameSetting.Players[i].transform.FindChild("Camera").gameObject.GetComponent<Camera>();
+                    Camera camera = GameSetting.Players[i].transform.Find("Camera").gameObject.GetComponent<Camera>();
                     camera.cullingMask |= (1 << LayerMask.NameToLayer("BulletTrail"));
                 }
                 else {
-                    Camera camera = GameSetting.Players[i].transform.FindChild("Camera").gameObject.GetComponent<Camera>();
+                    Camera camera = GameSetting.Players[i].transform.Find("Camera").gameObject.GetComponent<Camera>();
                     camera.cullingMask &= ~(1 << LayerMask.NameToLayer("BulletTrail"));
                 }
 

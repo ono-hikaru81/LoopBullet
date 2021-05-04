@@ -26,6 +26,9 @@ public class Bullet : MonoBehaviour {
 	public float Timer { get => timer; set => timer = value; }
 	ShowScore showScore;
 
+	// エフェクト
+	GameObject hitEffect;
+
 	void Start () {
 		speed = baseSpeed;
 
@@ -36,6 +39,8 @@ public class Bullet : MonoBehaviour {
 		rb.freezeRotation = true;
 
 		Planet = Master.Planet;
+
+		hitEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Hit/Hit" );
 	}
 
 	void Update () {
@@ -49,8 +54,10 @@ public class Bullet : MonoBehaviour {
 		// Gravity
 		RaycastHit hit = new RaycastHit ();
 		if (Physics.Raycast ( transform.position, -transform.up, out hit, 10 )) {
-			distanceToGround = hit.distance;
-			groundNormal = hit.normal;
+			if (hit.collider.isTrigger == false && hit.collider.tag != "Wall") {
+				distanceToGround = hit.distance;
+				groundNormal = hit.normal;
+			}
 
 			onGround = (distanceToGround <= 0.1f) ? true : false;
 		}
@@ -79,16 +86,27 @@ public class Bullet : MonoBehaviour {
 				}
 
 				p.Score -= s;
-				showScore.Exec ( p.transform, -s );
+				p.ResetInvincibleTimer ();
+				showScore?.Exec ( p.transform, -s );
 			}
 
+			var e = Instantiate ( hitEffect, transform.position, transform.rotation );
+			Destroy ( e, 1.0f );
+			Destroy ( gameObject );
+		}
+		else if (collision.gameObject.tag == "Satellite") {
+			var e = Instantiate ( hitEffect, transform.position, transform.rotation );
+			Destroy ( e, 1.0f );
 			Destroy ( gameObject );
 		}
 
 		// 弾にぶつかると進む向きが反転
 		if (collision.gameObject.tag == "Bullet") {
 			speed *= -1;
+			var e = Instantiate ( hitEffect, transform.position, transform.rotation );
+			Destroy ( e, 1.0f );
 		}
+
 	}
 
 	// 生存時間に応じてスコアを返す

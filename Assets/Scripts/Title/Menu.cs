@@ -16,13 +16,13 @@ public class Menu : MonoBehaviour {
 	int currentSelect;
 
 	// UI
-	[SerializeField] RawImage battle;
-	[SerializeField] RawImage option;
-	RawImage[] menus;
+	[SerializeField] UIShadow battle;
+	[SerializeField] UIShadow option;
+	UIShadow[] menus;
 
 	// Start is called before the first frame update
 	void Start () {
-		menus = new RawImage[]{
+		menus = new UIShadow[]{
 			battle,
 			option,
 		};
@@ -31,6 +31,11 @@ public class Menu : MonoBehaviour {
 			Screen.Option,
 		};
 
+		StartCoroutine ( StartDeray () );
+	}
+
+	IEnumerator StartDeray () {
+		yield return null;
 		UpdateMenuUI ( currentSelect );
 	}
 
@@ -41,12 +46,11 @@ public class Menu : MonoBehaviour {
 
 	void UpdateMenuUI ( int number ) {
 		for (int i = 0; i < menus.Length; i++) {
-			var c = menus[i].color;
 			if (i == number) {
-				menus[i].color = new Color ( c.r, c.g, c.b, 1.0f );
+				menus[i].SetBrightMode ( UIShadow.BrightMode.Bright );
 			}
 			else {
-				menus[i].color = new Color ( c.r, c.g, c.b, 0.5f );
+				menus[i].SetBrightMode ( UIShadow.BrightMode.Shadow );
 			}
 		}
 	}

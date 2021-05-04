@@ -24,7 +24,7 @@ public class GameSetting : MonoBehaviour {
 
 	static List<GameObject> players = new List<GameObject> ();
 	public static List<GameObject> Players { get => players; set => players = value; }
-	static List<GameObject> cameras = new List<GameObject>();
+	static List<GameObject> cameras = new List<GameObject> ();
 	public static List<GameObject> Cameras { get => cameras; set => cameras = value; }
 
 	static Material[] playerMaterials = new Material[MAX_PLAYER];
@@ -49,10 +49,13 @@ public class GameSetting : MonoBehaviour {
 	}
 
 	static public void SetPlayerMaterial () {
+		var p = players.ToList ();
+		p.Reverse ();
 		for (int i = 0; i < players.Count; i++) {
-			var p = players.ToList ();
-			p.Reverse ();
-			p[i].GetComponent<MeshRenderer> ().material = playerMaterials[i];
+			var s = p[i].GetComponentsInChildren<SkinnedMeshRenderer> ();
+			foreach (var m in s) {
+				m.material = playerMaterials[i];
+			}
 		}
 	}
 }

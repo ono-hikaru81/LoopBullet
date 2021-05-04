@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -10,18 +11,24 @@ public class StageSelect : MonoBehaviour {
 	int currentSelect;
 
 	// UI
-	[SerializeField] RawImage jimejime;
-	[SerializeField] RawImage moon;
-	[SerializeField] RawImage magmag;
-	RawImage[] stars;
+	[SerializeField] UIShadow jimejime;
+	[SerializeField] UIShadow moon;
+	[SerializeField] UIShadow magmag;
+	UIShadow[] stars;
 
 	// Start is called before the first frame update
 	void Start () {
-		stars = new RawImage[]{
+		stars = new UIShadow[]{
 			jimejime,
 			moon,
 			magmag,
 		};
+
+		StartCoroutine ( StartDeray () );
+	}
+
+	IEnumerator StartDeray () {
+		yield return null;
 		UpdateStarUI ( currentSelect );
 	}
 
@@ -32,12 +39,11 @@ public class StageSelect : MonoBehaviour {
 
 	void UpdateStarUI ( int number ) {
 		for (int i = 0; i < stars.Length; i++) {
-			var c = stars[i].color;
 			if (i == number) {
-				stars[i].color = new Color ( c.r, c.g, c.b, 1.0f );
+				stars[i].SetBrightMode ( UIShadow.BrightMode.Bright );
 			}
 			else {
-				stars[i].color = new Color ( c.r, c.g, c.b, 0.5f );
+				stars[i].SetBrightMode ( UIShadow.BrightMode.Shadow );
 			}
 		}
 	}

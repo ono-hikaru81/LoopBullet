@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class StatusUI : MonoBehaviour {
 	Player player;
+	GameControl gameControl;
 	public Player PlayerData { get => player; set => player = value; }
-	[SerializeField] Score score;
+	[SerializeField] RawImage rank;
+	[SerializeField] Texture[] rankTexs;
 	[SerializeField] RawImage item;
 	[SerializeField] RawImage[] magazine;
 	[SerializeField] Texture bullet;
@@ -21,6 +23,7 @@ public class StatusUI : MonoBehaviour {
 	[SerializeField] Texture slowTimer;
 	// Start is called before the first frame update
 	void Start () {
+		gameControl = FindObjectOfType<GameControl> ();
 		Color c = result.color;
 		c.a = 0;
 		result.color = c;
@@ -28,41 +31,45 @@ public class StatusUI : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		// Score
-		score.UpdateUI ( player );
+		// Rank
+		for (int i = 0; i < gameControl.Rank.Count; i++) {
+			if (gameControl.Rank[i] == player) {
+				rank.texture = rankTexs[i];
+			}
+		}
 
 		// Item
-		for (int i = 0; i < GameSetting.Players.ToArray().Length; i++) {
+		for (int i = 0; i < GameSetting.Players.ToArray ().Length; i++) {
 			if (GameSetting.Players[i] != null) {
-				if (GameSetting.Players[i].GetComponent<Player>().UsableRadar == true) {
+				if (GameSetting.Players[i].GetComponent<Player> ().UsableRadar == true) {
 					itemValue = radar;
 				}
 				else {
 					itemValue = null;
 				}
 
-				if (GameSetting.Players[i].GetComponent<Player>().UsableSpdBullet == true) {
+				if (GameSetting.Players[i].GetComponent<Player> ().UsableSpdBullet == true) {
 					itemValue = speedBullet;
 				}
 				else {
 					itemValue = null;
 				}
 
-				if (GameSetting.Players[i].GetComponent<Player>().UsableHevBullet == true) {
+				if (GameSetting.Players[i].GetComponent<Player> ().UsableHevBullet == true) {
 					itemValue = heavyBullet;
 				}
 				else {
 					itemValue = null;
 				}
 
-				if (GameSetting.Players[i].GetComponent<Player>().UsableBoots == true) {
+				if (GameSetting.Players[i].GetComponent<Player> ().UsableBoots == true) {
 					itemValue = boots;
 				}
 				else {
 					itemValue = null;
 				}
 
-				if (GameSetting.Players[i].GetComponent<Player>().UsableSlowTimer == true) {
+				if (GameSetting.Players[i].GetComponent<Player> ().UsableSlowTimer == true) {
 					itemValue = slowTimer;
 				}
 				else {

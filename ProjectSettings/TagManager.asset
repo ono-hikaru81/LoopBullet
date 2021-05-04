@@ -7,6 +7,9 @@ TagManager:
   - Planet
   - Item
   - Bullet
+  - Slow
+  - Wall
+  - Satellite
   layers:
   - Default
   - TransparentFX
@@ -18,9 +21,9 @@ TagManager:
   - Bullet
   - BulletTrail
   - ItemBox
-  - 
-  - 
-  - 
+  - Slow
+  - Wall
+  - Satellite
   - 
   - 
   - 

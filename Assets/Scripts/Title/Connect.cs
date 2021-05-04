@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Connect : MonoBehaviour {
@@ -62,6 +59,7 @@ public class Connect : MonoBehaviour {
 			foreach (var p in players) {
 				Destroy ( p.gameObject );
 			}
+			GameSetting.Players = new List<GameObject> ();
 
 			enterRelease = false;
 			backRelease = false;

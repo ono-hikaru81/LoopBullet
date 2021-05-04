@@ -8,10 +8,10 @@ using UnityEngine.UI;
 
 public class Result : MonoBehaviour {
 	[SerializeField] GameObject menu; // リザルトメニュー
-	[SerializeField] RawImage again;    // もう一度プレイ
-	[SerializeField] RawImage stage;    // ステージ選択
-	[SerializeField] RawImage title;    // タイトルへ
-	RawImage[] menus;
+	[SerializeField] UIShadow again;    // もう一度プレイ
+	[SerializeField] UIShadow stage;    // ステージ選択
+	[SerializeField] UIShadow title;    // タイトルへ
+	UIShadow[] menus;
 	int currentSelect;
 	bool showMenu;
 	[SerializeField] RawImage[] iconFrames;
@@ -20,7 +20,7 @@ public class Result : MonoBehaviour {
 
 	// Start is called before the first frame update
 	void Start () {
-		menus = new RawImage[]{
+		menus = new UIShadow[]{
 			again,
 			stage,
 			title
@@ -31,20 +31,10 @@ public class Result : MonoBehaviour {
 		showMenu = false;
 		menu.SetActive ( false );
 
-		foreach (RawImage temp in menus) {
-			temp.color = new Color ( 0.5f, 0.5f, 0.5f );
-		}
-
-		menus[currentSelect].color = new Color ( 1.0f, 1.0f, 1.0f );
+		UpdateUI ();
 
 		// スコア順に並べる
-		var p = new List<Player> ();
-		foreach (GameObject o in GameSetting.Players) {
-			p.Add ( o.GetComponent<Player> () );
-		}
-
-		p = p.OrderBy ( x => x.Score ).ToList ();
-		p.Reverse ();
+		var p = FindObjectOfType<GameControl> ().Rank;
 
 		for (int i = 0; i < p.Count; i++) {
 			var n = p[i].GetComponent<PlayerInput> ().playerIndex;
@@ -59,6 +49,15 @@ public class Result : MonoBehaviour {
 
 	}
 
+	void UpdateUI () {
+		// 選択中の項目のみ強調
+		foreach (var m in menus) {
+			m.SetBrightMode ( UIShadow.BrightMode.Shadow );
+		}
+
+		menus[currentSelect].SetBrightMode ( UIShadow.BrightMode.Bright );
+	}
+
 	// ----------------入力--------------------
 	public void OnSelect ( InputValue value ) {
 		var a = value.Get<Vector2> ();
@@ -68,12 +67,7 @@ public class Result : MonoBehaviour {
 
 				currentSelect = UIFunctions.RevisionValue ( currentSelect, menus.Length - 1 );
 
-				// 選択中の項目のみ強調
-				foreach (RawImage temp in menus) {
-					temp.color = new Color ( 0.5f, 0.5f, 0.5f );
-				}
-
-				menus[currentSelect].color = new Color ( 1.0f, 1.0f, 1.0f );
+				UpdateUI ();
 			}
 		}
 	}
@@ -95,6 +89,7 @@ public class Result : MonoBehaviour {
 			}
 			else if (menus[currentSelect] == title) {
 				SceneManager.LoadScene ( "Title" );
+				GameSetting.Players = new List<GameObject> ();
 				GameSetting.SceneToLoad = TitleManager.Screens.Title;
 			}
 		}

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,9 +21,11 @@ public class Player : MonoBehaviour {
 		set { speed = value; }
 	}
 	[SerializeField] float baseSpeed;
-	public float BaseSpeed { 
+	public float BaseSpeed {
 		get { return baseSpeed; }
 	}
+	float slowSpeed;
+	float changeSpeedTimer; // 元のスピードに戻る
 	const float GRAVITY = 100;
 	bool onGround;
 	float distanceToGround; // 地面との距離
@@ -48,6 +51,8 @@ public class Player : MonoBehaviour {
 		get { return disableInput; }
 		set { disableInput = value; }
 	}
+	float invincibleTimer; // 無敵タイマー
+	readonly float invincibleInterval = 1.0f;   // 無敵
 	bool takeDamage;    // ダメージを受けるか
 	public bool TakeDamage {
 		get { return takeDamage; }
@@ -58,6 +63,8 @@ public class Player : MonoBehaviour {
 		get { return score; }
 		set { score = value; }
 	}
+	ShowScore showScore;
+	public ShowScore ShowScore { get => showScore; set => showScore = value; }
 
 	// アイテム
 	bool isHitItemBox;
@@ -66,8 +73,7 @@ public class Player : MonoBehaviour {
 		set { isHitItemBox = value; }
 	}
 	bool usableRadar;
-	public bool UsableRadar
-	{
+	public bool UsableRadar {
 		get { return usableRadar; }
 		set { usableRadar = value; }
 	}
@@ -107,15 +113,22 @@ public class Player : MonoBehaviour {
 		set { isStartedRadar = value; }
 	}
 
+	Animator anim;
+
 	// 入力
 	Vector2 axis;
+
+	// エフェクト
+	GameObject muzzleEffect;
 
 	void Start () {
 		bc = GetComponent<BoxCollider> ();
 		mr = GetComponent<MeshRenderer> ();
 		rb = GetComponent<Rigidbody> ();
+		anim = GetComponent<Animator> ();
 		fieldBullets = new Queue<GameObject> ();
 		speed = baseSpeed;
+		slowSpeed = baseSpeed * 0.7f;
 		onGround = false;
 		magazine = maxMagazine;
 		onReload = false;
@@ -130,6 +143,8 @@ public class Player : MonoBehaviour {
 		usableHevBullet = false;
 		usableBoots = false;
 		usableSlowTimer = false;
+		invincibleTimer = invincibleInterval;
+		muzzleEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Muzzle/MuzzleFlash" );
 	}
 
 	void Update () {
@@ -148,10 +163,12 @@ public class Player : MonoBehaviour {
 		// Gravity
 		RaycastHit hit = new RaycastHit ();
 		if (Physics.Raycast ( transform.position, -transform.up, out hit, 10 )) {
-			distanceToGround = hit.distance;
-			groundNormal = hit.normal;
+			if (hit.collider.isTrigger == false && hit.collider.tag != "Wall") {
+				distanceToGround = hit.distance;
+				groundNormal = hit.normal;
+			}
 
-			onGround = (distanceToGround <= 0.2f) ? true : false;
+			onGround = (distanceToGround <= 0.1f) ? true : false;
 		}
 
 		Vector3 gravDirection = (transform.position - planet.transform.position).normalized;
@@ -187,6 +204,24 @@ public class Player : MonoBehaviour {
 				onReload = true;
 			}
 		}
+
+		// スピードを元に戻す
+		changeSpeedTimer += Time.deltaTime;
+		if (changeSpeedTimer > 0.3f) {
+			speed = baseSpeed;
+			anim.SetBool ( "isSlow", false );
+		}
+
+		// 無敵時間
+		if (disableInput == false) {
+			invincibleTimer -= Time.deltaTime;
+			if (invincibleTimer < 0.0f) {
+				takeDamage = true;
+			}
+			else {
+				takeDamage = false;
+			}
+		}
 	}
 
 	// 惑星に向けて平行をとる
@@ -210,10 +245,38 @@ public class Player : MonoBehaviour {
 		score = 0;
 	}
 
+	public void ResetInvincibleTimer () => invincibleTimer = invincibleInterval;
+
+	private void OnCollisionEnter ( Collision collision ) {
+		if (collision.gameObject.tag == "Item") {
+			if ((usableRadar == true) || (usableSpdBullet == true) || (usableSpdBullet == true) ||
+				(usableBoots == true) || (usableSlowTimer == true)) return;
+			isHitItemBox = true;
+		}
+
+		if (collision.gameObject.tag == "Satellite") {
+			if (takeDamage == true) {
+				score--;
+				ShowScore?.Exec ( transform, -1 );
+				ResetInvincibleTimer ();
+			}
+		}
+	}
+
+	void OnTriggerStay ( Collider collider ) {
+		if (collider.tag == "Slow") {
+			speed = slowSpeed;
+			anim.SetBool ( "isSlow", true );
+			changeSpeedTimer = 0;
+		}
+	}
+
 	// ------------入力-----------------
 	public void OnMove ( InputValue value ) {
 		axis = value.Get<Vector2> ();
 		axis.y *= -1;
+		var b = axis != Vector2.zero;
+		anim.SetBool ( "isRunning", b );
 	}
 
 	public void OnShot ( InputValue value ) {
@@ -229,6 +292,10 @@ public class Player : MonoBehaviour {
 				Destroy ( fieldBullets.Dequeue () );
 			}
 
+			anim.SetTrigger ( "isShot" );
+			var e = Instantiate ( muzzleEffect, transform.position, transform.rotation );
+			Destroy ( e, 1.0f );
+
 			magazine--;
 			onReload = false;
 			shotCooldown = shotInterval;
@@ -240,7 +307,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void OnItem ( InputValue value ) {
-		if(value.Get<float> () == 1) {
+		if (value.Get<float> () == 1) {
 			if (disableInput == true) return;
 			if (usableRadar == true) {
 				usableRadar = false;
@@ -248,16 +315,16 @@ public class Player : MonoBehaviour {
 			}
 			else if (usableSpdBullet == true) {
 				Vector3 shotPos = transform.position + transform.forward * 0.5f;
-				GameObject b = Instantiate(speedBullet, shotPos, transform.rotation);
-				b.GetComponent<Bullet>().Master = this;
-				fieldBullets.Enqueue(b);
+				GameObject b = Instantiate ( speedBullet, shotPos, transform.rotation );
+				b.GetComponent<Bullet> ().Master = this;
+				fieldBullets.Enqueue ( b );
 				usableSpdBullet = false;
 			}
 			else if (usableHevBullet == true) {
 				Vector3 shotPos = transform.position + transform.forward * 0.5f;
-				GameObject b = Instantiate(heavyBullet, shotPos, transform.rotation);
-				b.GetComponent<Bullet>().Master = this;
-				fieldBullets.Enqueue(b);
+				GameObject b = Instantiate ( heavyBullet, shotPos, transform.rotation );
+				b.GetComponent<Bullet> ().Master = this;
+				fieldBullets.Enqueue ( b );
 				usableHevBullet = false;
 			}
 			else if (usableBoots == true) {
@@ -273,13 +340,5 @@ public class Player : MonoBehaviour {
 
 	public void OnBack () {
 		Gc.Pause ( false );
-	}
-
-	private void OnCollisionEnter( Collision collision) {
-		if(collision.gameObject.tag == "Item") {
-			if ((usableRadar == true) || (usableSpdBullet == true) || (usableSpdBullet == true) ||
-				(usableBoots == true) || (usableSlowTimer == true)) return;
-			isHitItemBox = true;
-		}
 	}
 }

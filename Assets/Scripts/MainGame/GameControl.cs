@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using TreeEditor;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour {
 	[SerializeField] GameObject[] playerUIList;
+	List<Player> rank = new List<Player> ();
+	public List<Player> Rank { get => rank; set => rank = value; }
 
 	// イントロ
 	[SerializeField] GameObject start;
@@ -28,6 +30,7 @@ public class GameControl : MonoBehaviour {
 		get { return timer; }
 		set { timer = value; }
 	}
+
 	[SerializeField] Texture[] numbers;
 	[SerializeField] RawImage[] timers;
 
@@ -49,6 +52,7 @@ public class GameControl : MonoBehaviour {
 
 		foreach (var p in GameSetting.Players) {
 			p.GetComponent<Player> ().Gc = this;
+			p.GetComponent<Player> ().ShowScore = GameObject.Find ( "ScoreMng" ).GetComponent<ShowScore> ();
 		}
 
 		// 星の生成
@@ -61,8 +65,7 @@ public class GameControl : MonoBehaviour {
 				star = (GameObject)Resources.Load ( "Prefabs/St2_Moon" );
 				break;
 			case GameSetting.Stars.Magmag:
-				// star = ( GameObject ) Resources.Load( "Prefabs/St3_Magmag" );
-				star = (GameObject)Resources.Load ( "Prefabs/St2_Moon" ); // モデルが出来れば上を使用
+				star = (GameObject)Resources.Load ( "Prefabs/St3_Magmag" );
 				break;
 			default:
 				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
@@ -76,13 +79,22 @@ public class GameControl : MonoBehaviour {
 			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Players[i].GetComponent<Player> ();
 			playerUIList[n].SetActive ( true );
 			GameSetting.Players[i].GetComponent<Player> ().Planet = star;
-			GameSetting.Players[i].transform.position = new Vector3 ( i * 2, 5, 0 );
+			GameSetting.Players[i].transform.position = new Vector3 ( i * -2, 3, 3 );
+			GameSetting.Players[i].transform.Rotate ( new Vector3 ( 40, 0, 0 ) );
 			GameSetting.Players[i].GetComponent<Player> ().Reset ();
+		}
+
+		foreach (GameObject o in GameSetting.Players) {
+			Rank.Add ( o.GetComponent<Player> () );
 		}
 	}
 
 	// Update is called once per frame
 	void Update () {
+		// 順位計算
+		Rank = Rank.OrderBy ( x => x.Score ).ToList ();
+		Rank.Reverse ();
+
 		// タイマー
 		if (isStart == true && isEnd == false && isPause == false) {
 			timer -= Time.deltaTime;
