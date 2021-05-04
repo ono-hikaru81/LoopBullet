@@ -106,7 +106,6 @@ public class Bullet : MonoBehaviour {
 			var e = Instantiate ( hitEffect, transform.position, transform.rotation );
 			Destroy ( e, 1.0f );
 		}
-
 	}
 
 	// 生存時間に応じてスコアを返す

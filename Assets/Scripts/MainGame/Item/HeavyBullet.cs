@@ -1,20 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
-public class HeavyBullet : MonoBehaviour
-{
+public class HeavyBullet : MonoBehaviour {
 	GameObject planet;  // 重力を受ける星
 	public GameObject Planet { get => planet; set => planet = value; }
 	float speed;
-	public float Speed
-	{
+	public float Speed {
 		get { return speed; }
 		set { speed = value; }
 	}
 	[SerializeField] float baseSpeed;
-	public float BaseSpeed
-	{
+	public float BaseSpeed {
 		get { return baseSpeed; }
 	}
 	const float GRAVITY = 100;
@@ -28,21 +26,24 @@ public class HeavyBullet : MonoBehaviour
 	public float Timer { get => timer; set => timer = value; }
 	ShowScore showScore;
 
-	void Start()
-	{
+	// エフェクト
+	GameObject hitEffect;
+
+	void Start() {
 		speed = baseSpeed;
 
-		showScore = GameObject.Find("ScoreMng").GetComponent<ShowScore>();
+		showScore = GameObject.Find( "ScoreMng" ).GetComponent<ShowScore>();
 		onGround = false;
 
 		rb = GetComponent<Rigidbody>();
 		rb.freezeRotation = true;
 
 		Planet = Master.Planet;
+
+		hitEffect = (GameObject)Resources.Load( "Prefabs/Effects/Hit/Hit" );
 	}
 
-	void Update()
-	{
+	void Update() {
 		timer += Time.deltaTime;
 
 		// Movement
@@ -52,59 +53,63 @@ public class HeavyBullet : MonoBehaviour
 
 		// Gravity
 		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(transform.position, -transform.up, out hit, 10))
-		{
-			distanceToGround = hit.distance;
-			groundNormal = hit.normal;
+		if (Physics.Raycast( transform.position, -transform.up, out hit, 10 )) {
+            if (hit.collider.isTrigger == false && hit.collider.tag != "Wall") {
+				distanceToGround = hit.distance;
+				groundNormal = hit.normal;
+			}			
 
 			onGround = (distanceToGround <= 0.1f) ? true : false;
 		}
 
 		Vector3 gravDirection = (transform.position - Planet.transform.position).normalized;
 
-		if (onGround == false)
-		{
-			rb.AddForce(gravDirection * -GRAVITY);
+		if (onGround == false) {
+			rb.AddForce( gravDirection * -GRAVITY );
 		}
 
 		// Rotation
 
 		// 惑星に向けて平行をとる
-		Quaternion toRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
+		Quaternion toRotation = Quaternion.FromToRotation( transform.up, groundNormal ) * transform.rotation;
 		transform.rotation = toRotation;
 	}
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		if (collision.gameObject.tag == "Player")
-		{
+	private void OnCollisionEnter(Collision collision) {
+		if (collision.gameObject.tag == "Player") {
 			Player p = collision.gameObject.GetComponent<Player>();
-			if (p.TakeDamage == true)
-			{
+			if (p.TakeDamage == true) {
 				var s = ConvertToScore();
-				if (p != Master)
-				{
+				if (p != Master) {
 					master.Score += s;
-					showScore.Exec(master.transform, s);
+					showScore.Exec( master.transform, s );
 				}
 
 				p.Score -= s;
-				showScore.Exec(p.transform, -s);
+				p.ResetInvincibleTimer();
+				showScore.Exec( p.transform, -s );
 			}
 
-			Destroy(gameObject);
+			var e = Instantiate( hitEffect, transform.position, transform.rotation );
+			Destroy( e, 1.0f );
+			Destroy( gameObject );
+		}
+		else if (collision.gameObject.tag == "Satellite") {
+			var e = Instantiate( hitEffect, transform.position, transform.rotation );
+			Destroy( e, 1.0f );
+			Destroy( gameObject );
 		}
 
 		// 弾にぶつかると進む向きが反転
-		if (collision.gameObject.tag == "Bullet")
-		{
+		if (collision.gameObject.tag == "Bullet") {
 			speed *= -1;
+			var e = Instantiate( hitEffect, transform.position, transform.rotation );
+			Destroy( e, 1.0f );
 		}
 	}
 
 	// 生存時間に応じてスコアを返す
-	int ConvertToScore()
-	{
+	int ConvertToScore() {
 		var t = (int)timer;
 		if (t == 7) return 7;
 		else if (t <= 3) return 3;
