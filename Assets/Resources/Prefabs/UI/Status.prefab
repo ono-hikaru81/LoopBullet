@@ -60,7 +60,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: a18f08f14aecc674fb811f3d3f48c454, type: 3}
   - {fileID: 2800000, guid: 8781f6cc9ee093e4c9e77398e202b825, type: 3}
   - {fileID: 2800000, guid: 4429d5ce86622e44c9295899721120d5, type: 3}
-  item: {fileID: 0}
+  item: {fileID: 161963080524345596}
   magazine:
   - {fileID: 161963081437848280}
   - {fileID: 161963079658079048}
@@ -75,6 +75,7 @@ MonoBehaviour:
   heavyBullet: {fileID: 2800000, guid: 1a7dfd28aef2dce42b2310c9f3f3cdef, type: 3}
   boots: {fileID: 2800000, guid: ea276811793b43a438c281cecea3b5ad, type: 3}
   slowTimer: {fileID: 2800000, guid: 0efc644a0b8486a4ea2fb337c172a6e4, type: 3}
+  noItem: {fileID: 2800000, guid: 02c4afa2601db1b4f8287af64236c0a6, type: 3}
 --- !u!1 &161963079623892299
 GameObject:
   m_ObjectHideFlags: 0
