@@ -7,9 +7,12 @@ TagManager:
   - Planet
   - Item
   - Bullet
-  - Slow
   - Wall
   - Satellite
+  - Bush
+  - Mud
+  - Ash
+  - Slow
   layers:
   - Default
   - TransparentFX

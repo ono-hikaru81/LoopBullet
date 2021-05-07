@@ -10,7 +10,7 @@ public class Division : MonoBehaviour {
 
 	// Start is called before the first frame update
 	void Start () {
-		if (GameSetting.Players.Count <= 2) {
+		if (GameSetting.Instance.Players.Count <= 2) {
 			GetComponent<RawImage> ().texture = division2;
 			timer.localPosition = new Vector3 ( 0, 430, 0 );
 		}

@@ -263,8 +263,22 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	void OnTriggerEnter ( Collider collider ) {
+		if (collider.tag == "Mud") {
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Mud );
+		}
+		else if (collider.tag == "Ash") {
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Ash );
+		}
+
+		if (collider.tag == "Bush") {
+			SoundManager.Instance.PlaySE ( SoundManager.SE.OnBush );
+		}
+	}
+
 	void OnTriggerStay ( Collider collider ) {
-		if (collider.tag == "Slow") {
+		var t = collider.tag;
+		if (t == "Mud" || t == "Ash") {
 			speed = slowSpeed;
 			anim.SetBool ( "isSlow", true );
 			changeSpeedTimer = 0;
@@ -292,6 +306,7 @@ public class Player : MonoBehaviour {
 				Destroy ( fieldBullets.Dequeue () );
 			}
 
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Shot );
 			anim.SetTrigger ( "isShot" );
 			var e = Instantiate ( muzzleEffect, transform.position, transform.rotation );
 			Destroy ( e, 1.0f );

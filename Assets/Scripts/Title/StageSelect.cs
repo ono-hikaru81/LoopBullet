@@ -56,24 +56,29 @@ public class StageSelect : MonoBehaviour {
 
 			currentSelect = UIFunctions.RevisionValue ( currentSelect, stars.Length - 1 );
 			UpdateStarUI ( currentSelect );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Cursor );
 		}
 	}
 
 	public void OnEnter () {
 		if (stars[currentSelect] == jimejime) {
-			GameSetting.Star = GameSetting.Stars.Jimejime;
+			GameSetting.Instance.Star = GameSetting.Stars.Jimejime;
 		}
 		else if (stars[currentSelect] == moon) {
-			GameSetting.Star = GameSetting.Stars.Moon;
+			GameSetting.Instance.Star = GameSetting.Stars.Moon;
 		}
 		else if (stars[currentSelect] == magmag) {
-			GameSetting.Star = GameSetting.Stars.Magmag;
+			GameSetting.Instance.Star = GameSetting.Stars.Magmag;
 		}
 
-		GameSetting.SetPlayerMaterial ();
+		GameSetting.Instance.SetPlayerMaterial ();
 
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
 		SceneManager.LoadScene ( "MainGame" );
 	}
 
-	public void OnBack () => TitleManager.ChangeScreen ( TitleManager.Screens.Connect );
+	public void OnBack () {
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
+		TitleManager.ChangeScreen ( TitleManager.Screens.Connect );
+	}
 }

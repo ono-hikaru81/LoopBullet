@@ -799,7 +799,7 @@ GameObject:
   - component: {fileID: 3707122098710848923}
   m_Layer: 10
   m_Name: Ash
-  m_TagString: Slow
+  m_TagString: Ash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

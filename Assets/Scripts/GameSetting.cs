@@ -6,33 +6,33 @@ using System.Runtime.Versioning;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameSetting : MonoBehaviour {
+public class GameSetting : Singleton<GameSetting> {
 	public enum Stars {
 		Jimejime,
 		Moon,
 		Magmag,
 	};
-	static Stars star;
-	static public Stars Star {
+	Stars star;
+	public Stars Star {
 		get { return star; }
 		set { star = value; }
 	}
-	static TitleManager.Screens sceneToLoad = TitleManager.Screens.Title;
-	public static TitleManager.Screens SceneToLoad { get => sceneToLoad; set => sceneToLoad = value; }
+	TitleManager.Screens sceneToLoad = TitleManager.Screens.Title;
+	public TitleManager.Screens SceneToLoad { get => sceneToLoad; set => sceneToLoad = value; }
 
 	[HideInInspector] public const int MAX_PLAYER = 4;
 
-	static List<GameObject> players = new List<GameObject> ();
-	public static List<GameObject> Players { get => players; set => players = value; }
-	static List<GameObject> cameras = new List<GameObject> ();
-	public static List<GameObject> Cameras { get => cameras; set => cameras = value; }
+	List<GameObject> players = new List<GameObject> ();
+	public List<GameObject> Players { get => players; set => players = value; }
+	List<GameObject> cameras = new List<GameObject> ();
+	public List<GameObject> Cameras { get => cameras; set => cameras = value; }
 
-	static Material[] playerMaterials = new Material[MAX_PLAYER];
-	public static Material[] PlayerMaterials { get => playerMaterials; set => playerMaterials = value; }
-	static Texture[] playerIcons = new Texture[MAX_PLAYER];
-	public static Texture[] PlayerIcons { get => playerIcons; set => playerIcons = value; }
-	static Texture[] playerNumbers = new Texture[MAX_PLAYER];
-	public static Texture[] PlayerNumbers { get => playerNumbers; set => playerNumbers = value; }
+	Material[] playerMaterials = new Material[MAX_PLAYER];
+	public Material[] PlayerMaterials { get => playerMaterials; set => playerMaterials = value; }
+	Texture[] playerIcons = new Texture[MAX_PLAYER];
+	public Texture[] PlayerIcons { get => playerIcons; set => playerIcons = value; }
+	Texture[] playerNumbers = new Texture[MAX_PLAYER];
+	public Texture[] PlayerNumbers { get => playerNumbers; set => playerNumbers = value; }
 
 	// Start is called before the first frame update
 	void Start () {
@@ -48,7 +48,7 @@ public class GameSetting : MonoBehaviour {
 
 	}
 
-	static public void SetPlayerMaterial () {
+	public void SetPlayerMaterial () {
 		var p = players.ToList ();
 		p.Reverse ();
 		for (int i = 0; i < players.Count; i++) {

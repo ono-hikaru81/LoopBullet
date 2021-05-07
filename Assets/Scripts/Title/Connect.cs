@@ -42,28 +42,30 @@ public class Connect : MonoBehaviour {
 			icons[i].SetActive ( true );
 		}
 
-		// 接続するとPlayerInputが使えなくなるので手動
+		// 接続するとPlayerInputが使えなくなるので手動で
 		if (CanPressedEnter () && players.Length > 0) {
-			GameSetting.Players = new List<GameObject> ();
+			GameSetting.Instance.Players = new List<GameObject> ();
 			foreach (var p in players) {
-				GameSetting.Players.Add ( p.gameObject );
+				GameSetting.Instance.Players.Add ( p.gameObject );
 				DontDestroyOnLoad ( p.gameObject );
 			}
 
 			enterRelease = false;
 			backRelease = false;
 
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
 			TitleManager.ChangeScreen ( TitleManager.Screens.SelectStage );
 		}
 		else if (CanPressedBack ()) {
 			foreach (var p in players) {
 				Destroy ( p.gameObject );
 			}
-			GameSetting.Players = new List<GameObject> ();
+			GameSetting.Instance.Players = new List<GameObject> ();
 
 			enterRelease = false;
 			backRelease = false;
 
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
 			TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
 		}
 	}
@@ -74,4 +76,12 @@ public class Connect : MonoBehaviour {
 	bool CanPressedEnter () => (Keyboard.current.cKey.isPressed || Gamepad.current.buttonEast.isPressed) && enterRelease;
 
 	bool CanPressedBack () => (Keyboard.current.xKey.isPressed || Gamepad.current.buttonSouth.isPressed) && backRelease;
+
+	public void OnPlayerJoined () {
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Connect );
+	}
+
+	public void OnPlayerLeft () {
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Disconnect );
+	}
 }

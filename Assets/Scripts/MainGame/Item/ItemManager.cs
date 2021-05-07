@@ -22,29 +22,29 @@ public class ItemManager : MonoBehaviour {
 	}
 
 	void Update () {
-		for (int i = 0; i < GameSetting.Players.ToArray ().Length; i++) {
-			if (GameSetting.Players[i] != null) {
-				if (GameSetting.Players[i].GetComponent<Player> ().IsHitItemBox == true) {
+		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
+			if (GameSetting.Instance.Players[i] != null) {
+				if (GameSetting.Instance.Players[i].GetComponent<Player> ().IsHitItemBox == true) {
 					randomNum = Random.Range ( 0, itemNum );
 
 					switch ((Item)randomNum) {
 						case Item.radar:
-							GameSetting.Players[i].GetComponent<Player> ().UsableRadar = true;
+							GameSetting.Instance.Players[i].GetComponent<Player> ().UsableRadar = true;
 							break;
 						case Item.speedBullet:
-							GameSetting.Players[i].GetComponent<Player> ().UsableSpdBullet = true;
+							GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSpdBullet = true;
 							break;
 						case Item.heavyBullet:
-							GameSetting.Players[i].GetComponent<Player> ().UsableHevBullet = true;
+							GameSetting.Instance.Players[i].GetComponent<Player> ().UsableHevBullet = true;
 							break;
 						case Item.boots:
-							GameSetting.Players[i].GetComponent<Player> ().UsableBoots = true;
+							GameSetting.Instance.Players[i].GetComponent<Player> ().UsableBoots = true;
 							break;
 						case Item.slowTimer:
-							GameSetting.Players[i].GetComponent<Player> ().UsableSlowTimer = true;
+							GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSlowTimer = true;
 							break;
 					}
-					GameSetting.Players[i].GetComponent<Player> ().IsHitItemBox = false;
+					GameSetting.Instance.Players[i].GetComponent<Player> ().IsHitItemBox = false;
 				}
 			}
 		}

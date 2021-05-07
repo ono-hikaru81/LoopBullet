@@ -39,28 +39,28 @@ public class StatusUI : MonoBehaviour {
 		}
 
 		// Item
-		for (int i = 0; i < GameSetting.Players.ToArray ().Length; i++) {
-			if (GameSetting.Players[i] != null) {
-				if (GameSetting.Players[i].GetComponent<Player>().UsableRadar == false &&
-					GameSetting.Players[i].GetComponent<Player>().UsableSpdBullet == false &&
-					GameSetting.Players[i].GetComponent<Player>().UsableHevBullet == false &&
-					GameSetting.Players[i].GetComponent<Player>().UsableBoots == false &&
-					GameSetting.Players[i].GetComponent<Player>().UsableSlowTimer == false) {
+		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
+			if (GameSetting.Instance.Players[i] != null) {
+				if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableRadar == false &&
+					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSpdBullet == false &&
+					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableHevBullet == false &&
+					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableBoots == false &&
+					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSlowTimer == false) {
 					item.texture = noItem;
 				}
-				else if (GameSetting.Players[i].GetComponent<Player> ().UsableRadar == true) {
+				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableRadar == true) {
 					item.texture = radar;
 				}
-				else if (GameSetting.Players[i].GetComponent<Player> ().UsableSpdBullet == true) {
+				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSpdBullet == true) {
 					item.texture = speedBullet;
 				}
-				else if (GameSetting.Players[i].GetComponent<Player> ().UsableHevBullet == true) {
+				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableHevBullet == true) {
 					item.texture = heavyBullet;
 				}
-				else if (GameSetting.Players[i].GetComponent<Player> ().UsableBoots == true) {
+				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableBoots == true) {
 					item.texture = boots;
 				}
-				else if (GameSetting.Players[i].GetComponent<Player> ().UsableSlowTimer == true) {
+				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSlowTimer == true) {
 					item.texture = slowTimer;
 				}
 			}

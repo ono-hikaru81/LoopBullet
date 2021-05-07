@@ -35,7 +35,14 @@ public class TitleManager : MonoBehaviour {
 
 		screenNameList = Enum.GetNames ( typeof ( Screens ) );
 
-		ChangeScreen ( GameSetting.SceneToLoad );
+		ChangeScreen ( GameSetting.Instance.SceneToLoad );
+
+		StartCoroutine ( StartDeray () );
+	}
+
+	IEnumerator StartDeray () {
+		yield return null;
+		SoundManager.Instance.PlayBGM ( SoundManager.BGM.Title );
 	}
 
 	// Update is called once per frame

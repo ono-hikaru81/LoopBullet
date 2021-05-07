@@ -50,14 +50,14 @@ public class GameControl : MonoBehaviour {
 		isStart = false;
 		isEnd = false;
 
-		foreach (var p in GameSetting.Players) {
+		foreach (var p in GameSetting.Instance.Players) {
 			p.GetComponent<Player> ().Gc = this;
 			p.GetComponent<Player> ().ShowScore = GameObject.Find ( "ScoreMng" ).GetComponent<ShowScore> ();
 		}
 
 		// 星の生成
 		GameObject star;
-		switch (GameSetting.Star) {
+		switch (GameSetting.Instance.Star) {
 			case GameSetting.Stars.Jimejime:
 				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
 				break;
@@ -74,19 +74,21 @@ public class GameControl : MonoBehaviour {
 		star = Instantiate ( star, new Vector3 ( 0, 0, 0 ), Quaternion.identity );
 
 		// プレイヤー設定
-		for (int i = 0; i < GameSetting.Players.ToArray ().Length; i++) {
-			var n = GameSetting.Players[i].GetComponent<PlayerInput> ().playerIndex;
-			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Players[i].GetComponent<Player> ();
+		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
+			var n = GameSetting.Instance.Players[i].GetComponent<PlayerInput> ().playerIndex;
+			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Instance.Players[i].GetComponent<Player> ();
 			playerUIList[n].SetActive ( true );
-			GameSetting.Players[i].GetComponent<Player> ().Planet = star;
-			GameSetting.Players[i].transform.position = new Vector3 ( i * -2, 3, 3 );
-			GameSetting.Players[i].transform.Rotate ( new Vector3 ( 40, 0, 0 ) );
-			GameSetting.Players[i].GetComponent<Player> ().Reset ();
+			GameSetting.Instance.Players[i].GetComponent<Player> ().Planet = star;
+			GameSetting.Instance.Players[i].transform.position = new Vector3 ( i * -2, 3, 3 );
+			GameSetting.Instance.Players[i].transform.Rotate ( new Vector3 ( 40, 0, 0 ) );
+			GameSetting.Instance.Players[i].GetComponent<Player> ().Reset ();
 		}
 
-		foreach (GameObject o in GameSetting.Players) {
+		foreach (GameObject o in GameSetting.Instance.Players) {
 			Rank.Add ( o.GetComponent<Player> () );
 		}
+
+		SoundManager.Instance.PlayBGM ( SoundManager.BGM.MainGame );
 	}
 
 	// Update is called once per frame
@@ -110,13 +112,16 @@ public class GameControl : MonoBehaviour {
 			isEnd = true;
 		}
 
-		if (isEnd == true) {    // ゲーム終了したら
+		if (isEnd == true && finish.activeSelf == false && result.activeSelf == false) {    // ゲーム終了したら
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Finish );
 			finish.SetActive ( true );
+			// 1秒後にもろもろ表示する
 			Invoke ( "EndProc", 1.0f );
 		}
 	}
 
 	void EndProc () {
+		SoundManager.Instance.PlayBGM ( SoundManager.BGM.Result );
 		timerObj.SetActive ( false );
 		finish.SetActive ( false );
 		result.SetActive ( true );
@@ -136,10 +141,11 @@ public class GameControl : MonoBehaviour {
 
 	IEnumerator StartLogo () {
 		yield return new WaitForSeconds ( 0.01f );
-		foreach (var p in GameSetting.Players) {
+		foreach (var p in GameSetting.Instance.Players) {
 			p.GetComponent<Player> ().DisableInput = true;
 		}
 
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Count );
 		countNum[2].SetActive ( true );
 		yield return new WaitForSeconds ( 1.0f );
 		countNum[2].SetActive ( false );
@@ -152,12 +158,13 @@ public class GameControl : MonoBehaviour {
 		yield return new WaitForSeconds ( 1.0f );
 		countNum[0].SetActive ( false );
 
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Start );
 		start.SetActive ( true );
 		yield return new WaitForSeconds ( 0.5f );
 		start.SetActive ( false );
 
 		isStart = true;
-		foreach (var p in GameSetting.Players) {
+		foreach (var p in GameSetting.Instance.Players) {
 			p.GetComponent<Player> ().DisableInput = false;
 		}
 	}

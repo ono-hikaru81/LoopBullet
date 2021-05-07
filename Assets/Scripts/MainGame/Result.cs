@@ -38,8 +38,8 @@ public class Result : MonoBehaviour {
 
 		for (int i = 0; i < p.Count; i++) {
 			var n = p[i].GetComponent<PlayerInput> ().playerIndex;
-			iconFrames[i].texture = GameSetting.PlayerIcons[n];
-			numbers[i].texture = GameSetting.PlayerNumbers[n];
+			iconFrames[i].texture = GameSetting.Instance.PlayerIcons[n];
+			numbers[i].texture = GameSetting.Instance.PlayerNumbers[n];
 			scoreUIs[i].UpdateUI ( p[i] );
 		}
 	}
@@ -66,13 +66,15 @@ public class Result : MonoBehaviour {
 				currentSelect += (a.y == -1) ? 1 : -1;
 
 				currentSelect = UIFunctions.RevisionValue ( currentSelect, menus.Length - 1 );
-
+				SoundManager.Instance.PlaySE ( SoundManager.SE.Cursor );
 				UpdateUI ();
 			}
 		}
 	}
 
 	public void OnEnter () {
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
+
 		if (showMenu == false) {
 			// メニュー表示
 			showMenu = true;
@@ -85,20 +87,22 @@ public class Result : MonoBehaviour {
 			}
 			else if (menus[currentSelect] == stage) {
 				SceneManager.LoadScene ( "Title" );
-				GameSetting.SceneToLoad = TitleManager.Screens.SelectStage;
+				GameSetting.Instance.SceneToLoad = TitleManager.Screens.SelectStage;
 			}
 			else if (menus[currentSelect] == title) {
 				SceneManager.LoadScene ( "Title" );
-				GameSetting.Players = new List<GameObject> ();
-				GameSetting.SceneToLoad = TitleManager.Screens.Title;
+				GameSetting.Instance.Players = new List<GameObject> ();
+				GameSetting.Instance.SceneToLoad = TitleManager.Screens.Title;
 			}
 		}
 	}
 
 	public void OnBack () {
+
 		if (showMenu == true) {
 			// メニュー表示
 			showMenu = false;
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
 			menu.SetActive ( false );
 		}
 	}

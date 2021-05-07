@@ -602,7 +602,7 @@ MonoBehaviour:
   result: {fileID: 1189351002}
   pause: {fileID: 1403454469}
   timerObj: {fileID: 800870841}
-  playTime: 180
+  playTime: 2
   numbers:
   - {fileID: 2800000, guid: 79d77a44673c2c14f81b46f9ca04a298, type: 3}
   - {fileID: 2800000, guid: 8b316f0116c4bfe4eafa3ca2419c1cdf, type: 3}

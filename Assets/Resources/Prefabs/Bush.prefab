@@ -354,9 +354,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3408514004059273835}
+  - component: {fileID: -9025024903421700966}
   m_Layer: 0
   m_Name: Bush
-  m_TagString: Untagged
+  m_TagString: Bush
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -392,6 +393,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &-9025024903421700966
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2595948885601280209}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.24960071, y: 0.5264306, z: 0.2424519}
+  m_Center: {x: -0.0019265115, y: 0.2367847, z: 0.00095927715}
 --- !u!1 &2674460400585470211
 GameObject:
   m_ObjectHideFlags: 0

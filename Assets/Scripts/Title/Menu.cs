@@ -62,11 +62,14 @@ public class Menu : MonoBehaviour {
 			currentSelect += (a.y == -1) ? 1 : -1;
 
 			currentSelect = UIFunctions.RevisionValue ( currentSelect, screens.Length - 1 );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Cursor );
 			UpdateMenuUI ( currentSelect );
 		}
 	}
 
 	public void OnEnter () {
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
+
 		if (screens[currentSelect] == Screen.Connect) {
 			TitleManager.ChangeScreen ( TitleManager.Screens.Connect );
 		}
@@ -75,5 +78,8 @@ public class Menu : MonoBehaviour {
 		}
 	}
 
-	public void OnBack () => TitleManager.ChangeScreen ( TitleManager.Screens.Title );
+	public void OnBack () {
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
+		TitleManager.ChangeScreen ( TitleManager.Screens.Title );
+	}
 }

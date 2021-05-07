@@ -92,6 +92,7 @@ public class Bullet : MonoBehaviour {
 
 			var e = Instantiate ( hitEffect, transform.position, transform.rotation );
 			Destroy ( e, 1.0f );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Hit );
 			Destroy ( gameObject );
 		}
 		else if (collision.gameObject.tag == "Satellite") {
@@ -105,6 +106,7 @@ public class Bullet : MonoBehaviour {
 			speed *= -1;
 			var e = Instantiate ( hitEffect, transform.position, transform.rotation );
 			Destroy ( e, 1.0f );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Bound );
 		}
 	}
 

@@ -83,16 +83,19 @@ public class Option : MonoBehaviour {
 			currentSelect += (a.y == -1) ? 1 : -1;
 
 			currentSelect = UIFunctions.RevisionValue ( currentSelect, sliders.Length - 1 );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Cursor );
 			ChangeItem ();
 		}
 		else if (a.x != 0) {
 			sliders[currentSelect].Exec ( a.x );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.Gauge );
 			UpdateSetting ();
 		}
+
 	}
 
 	public void OnEnter () {
-		// ルール非表示
+		// ルール非表示なら
 		if (rule.activeSelf == false) {
 			rule.SetActive ( true );
 		}
@@ -100,10 +103,12 @@ public class Option : MonoBehaviour {
 			page++;
 			UpdateRuleUI ();
 		}
+
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
 	}
 
 	public void OnBack () {
-		// ルール非表示
+		// ルール非表示なら
 		if (rule.activeSelf == false) {
 			TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
 		}
@@ -111,5 +116,7 @@ public class Option : MonoBehaviour {
 			page--;
 			UpdateRuleUI ();
 		}
+
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
 	}
 }
