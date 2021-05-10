@@ -41,26 +41,26 @@ public class StatusUI : MonoBehaviour {
 		// Item
 		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
 			if (GameSetting.Instance.Players[i] != null) {
-				if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableRadar == false &&
-					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSpdBullet == false &&
-					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableHevBullet == false &&
-					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableBoots == false &&
-					GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSlowTimer == false) {
+				if (player.UsableRadar == false &&
+					player.UsableSpdBullet == false &&
+					player.UsableHevBullet == false &&
+					player.UsableBoots == false &&
+					player.UsableSlowTimer == false) {
 					item.texture = noItem;
 				}
-				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableRadar == true) {
+				else if (player.UsableRadar == true) {
 					item.texture = radar;
 				}
-				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSpdBullet == true) {
+				else if (player.UsableSpdBullet == true) {
 					item.texture = speedBullet;
 				}
-				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableHevBullet == true) {
+				else if (player.UsableHevBullet == true) {
 					item.texture = heavyBullet;
 				}
-				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableBoots == true) {
+				else if (player.UsableBoots == true) {
 					item.texture = boots;
 				}
-				else if (GameSetting.Instance.Players[i].GetComponent<Player> ().UsableSlowTimer == true) {
+				else if (player.UsableSlowTimer == true) {
 					item.texture = slowTimer;
 				}
 			}

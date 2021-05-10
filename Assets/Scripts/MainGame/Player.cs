@@ -252,6 +252,7 @@ public class Player : MonoBehaviour {
 			if ((usableRadar == true) || (usableSpdBullet == true) || (usableSpdBullet == true) ||
 				(usableBoots == true) || (usableSlowTimer == true)) return;
 			isHitItemBox = true;
+			SoundManager.Instance.PlaySE( SoundManager.SE.GetItem );
 		}
 
 		if (collision.gameObject.tag == "Satellite") {
@@ -334,6 +335,7 @@ public class Player : MonoBehaviour {
 				b.GetComponent<Bullet> ().Master = this;
 				fieldBullets.Enqueue ( b );
 				usableSpdBullet = false;
+				SoundManager.Instance.PlaySE( SoundManager.SE.SpeedBullet );
 			}
 			else if (usableHevBullet == true) {
 				Vector3 shotPos = transform.position + transform.forward * 0.5f;
@@ -341,6 +343,7 @@ public class Player : MonoBehaviour {
 				b.GetComponent<Bullet> ().Master = this;
 				fieldBullets.Enqueue ( b );
 				usableHevBullet = false;
+				SoundManager.Instance.PlaySE( SoundManager.SE.HeavyBullet );
 			}
 			else if (usableBoots == true) {
 				usableBoots = false;
@@ -349,6 +352,10 @@ public class Player : MonoBehaviour {
 			else if (usableSlowTimer == true) {
 				usableSlowTimer = false;
 				isStartedSlowTimer = true;
+			}
+
+			if(disableInput == true || usableBoots == true || usableSlowTimer == true) {
+				SoundManager.Instance.PlaySE( SoundManager.SE.UseItem );
 			}
 		}
 	}
