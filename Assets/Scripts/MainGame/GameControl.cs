@@ -11,6 +11,19 @@ public class GameControl : Singleton<GameControl> {
 	StatusUI[] statusUIs;
 	List<Player> rank = new List<Player> ();
 	public List<Player> Rank { get => rank; set => rank = value; }
+	[SerializeField] GameObject[] st1SpawnPoints;
+	[SerializeField] GameObject[] st2SpawnPoints;
+	[SerializeField] GameObject[] st3SpawnPoints;
+	struct SpawnPoint {
+		Vector3 pos;
+		Quaternion rot;
+		bool used;
+
+		public Vector3 Pos { get => pos; set => pos = value; }
+		public Quaternion Rot { get => rot; set => rot = value; }
+		public bool Used { get => used; set => used = value; }
+	}
+	SpawnPoint[] spawnPoints;
 
 	// イントロ
 	[SerializeField] GameObject start;
@@ -57,7 +70,6 @@ public class GameControl : Singleton<GameControl> {
 		isEnd = false;
 
 		foreach (var p in GameSetting.Instance.Players) {
-			p.GetComponent<Player> ().Gc = this;
 			p.GetComponent<Player> ().ShowScore = GameObject.Find ( "ScoreMng" ).GetComponent<ShowScore> ();
 		}
 
@@ -68,21 +80,34 @@ public class GameControl : Singleton<GameControl> {
 
 		// 星の生成
 		GameObject star;
+		GameObject[] sp;
 		switch (GameSetting.Instance.Star) {
 			case GameSetting.Stars.Jimejime:
 				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
+				sp = st1SpawnPoints;
 				break;
 			case GameSetting.Stars.Moon:
 				star = (GameObject)Resources.Load ( "Prefabs/St2_Moon" );
+				sp = st2SpawnPoints;
 				break;
 			case GameSetting.Stars.Magmag:
 				star = (GameObject)Resources.Load ( "Prefabs/St3_Magmag" );
+				sp = st3SpawnPoints;
 				break;
 			default:
 				star = (GameObject)Resources.Load ( "Prefabs/St1_Jimejime" );
+				sp = st1SpawnPoints;
 				break;
 		}
 		star = Instantiate ( star, new Vector3 ( 0, 0, 0 ), Quaternion.identity );
+
+		spawnPoints = new SpawnPoint[sp.Length];
+		for (int i = 0; i < sp.Length; i++) {
+			var s = sp[i];
+			spawnPoints[i].Pos = s.transform.position;
+			spawnPoints[i].Rot = s.transform.rotation;
+			spawnPoints[i].Used = false;
+		}
 
 		// プレイヤー設定
 		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
@@ -90,8 +115,18 @@ public class GameControl : Singleton<GameControl> {
 			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Instance.Players[i].GetComponent<Player> ();
 			playerUIList[n].SetActive ( true );
 			GameSetting.Instance.Players[i].GetComponent<Player> ().Planet = star;
-			GameSetting.Instance.Players[i].transform.position = new Vector3 ( i * -2, 3, 3 );
-			GameSetting.Instance.Players[i].transform.Rotate ( new Vector3 ( 40, 0, 0 ) );
+			// スポーン地点
+			SpawnPoint s;
+			while (true) {
+				var r = Random.Range ( 0, spawnPoints.Length );
+				if (spawnPoints[r].Used == false) {
+					s = spawnPoints[r];
+					spawnPoints[r].Used = true;
+					break;
+				}
+			}
+			GameSetting.Instance.Players[i].transform.position = s.Pos;
+			GameSetting.Instance.Players[i].transform.rotation = s.Rot;
 			GameSetting.Instance.Players[i].GetComponent<Player> ().Reset ();
 		}
 

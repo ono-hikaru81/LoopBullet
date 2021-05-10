@@ -68,8 +68,6 @@ public class Bullet : MonoBehaviour {
 			rb.AddForce ( gravDirection * -GRAVITY );
 		}
 
-		// Rotation
-
 		// 惑星に向けて平行をとる
 		Quaternion toRotation = Quaternion.FromToRotation ( transform.up, groundNormal ) * transform.rotation;
 		transform.rotation = toRotation;

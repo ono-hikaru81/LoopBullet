@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour {
 	Rigidbody rb;
 	GameControl gc;
-	public GameControl Gc { get => gc; set => gc = value; }
 	BoxCollider bc;
 	MeshRenderer mr;
 	GameObject planet;  // 重力を受ける星
@@ -26,7 +25,7 @@ public class Player : MonoBehaviour {
 	}
 	float slowSpeed;
 	float changeSpeedTimer; // 元のスピードに戻る
-	const float GRAVITY = 100;
+	const float GRAVITY = 50;
 	bool onGround;
 	float distanceToGround; // 地面との距離
 	Vector3 groundNormal;
@@ -117,6 +116,10 @@ public class Player : MonoBehaviour {
 
 	// 入力
 	Vector2 axis;
+	float shotPressTime;
+	bool shotPressed;
+	readonly float timeToAim = 0.2f;
+	bool canMove = true;
 
 	// エフェクト
 	GameObject muzzleEffect;
@@ -151,14 +154,22 @@ public class Player : MonoBehaviour {
 		if (planet == null) return;
 
 		// Movement
-		float x = 0;
-		float z = 0;
-		if (disableInput == false) {
-			x = axis.x * Time.deltaTime * speed;
-			z = axis.y * Time.deltaTime * -speed;
+		if (canMove == true) {
+			float x = 0;
+			float z = 0;
+			if (disableInput == false) {
+				x = axis.x * Time.deltaTime * speed;
+				z = axis.y * Time.deltaTime * -speed;
+			}
+
+			transform.Translate ( x, 0, z );
 		}
 
-		transform.Translate ( x, 0, z );
+		// Rotate
+		if (disableInput == false && axis != Vector2.zero) {
+			float y = axis.x * 150 * Time.deltaTime;
+			transform.Rotate ( 0, y, 0 );
+		}
 
 		// Gravity
 		RaycastHit hit = new RaycastHit ();
@@ -175,12 +186,6 @@ public class Player : MonoBehaviour {
 
 		if (onGround == false) {
 			rb.AddForce ( gravDirection * -GRAVITY );
-		}
-
-		// Rotate
-		if (disableInput == false) {
-			float y = axis.x * 150 * Time.deltaTime;
-			transform.Rotate ( 0, y, 0 );
 		}
 
 		ParallelToPlanet ();
@@ -222,6 +227,16 @@ public class Player : MonoBehaviour {
 				takeDamage = false;
 			}
 		}
+
+		// 構える関係
+		if (shotPressed == true) {
+			shotPressTime += Time.deltaTime;
+		}
+
+		if (shotPressTime >= timeToAim) {
+			canMove = false;
+			anim.SetBool ( "isAim", true );
+		}
 	}
 
 	// 惑星に向けて平行をとる
@@ -252,7 +267,7 @@ public class Player : MonoBehaviour {
 			if ((usableRadar == true) || (usableSpdBullet == true) || (usableSpdBullet == true) ||
 				(usableBoots == true) || (usableSlowTimer == true)) return;
 			isHitItemBox = true;
-			SoundManager.Instance.PlaySE( SoundManager.SE.GetItem );
+			SoundManager.Instance.PlaySE ( SoundManager.SE.GetItem );
 		}
 
 		if (collision.gameObject.tag == "Satellite" || collision.gameObject.tag == "Bullet") {
@@ -299,31 +314,52 @@ public class Player : MonoBehaviour {
 	}
 
 	public void OnShot ( InputValue value ) {
-		if (value.Get<float> () == 1) {
-			if (disableInput == true) return;
-			if (magazine <= 0 || shotCooldown > 0) return;
+		var input = value.Get<float> ();
+		// 押した時
+		if (input == 1) {
+			shotPressed = true;
 
-			Vector3 shotPos = transform.position + transform.forward * 0.7f;
-			GameObject b = Instantiate ( bullet, shotPos, transform.rotation );
-			b.GetComponent<Bullet> ().Master = this;
-			fieldBullets.Enqueue ( b );
-			if (fieldBullets.Count > maxFieldBullet) {
-				Destroy ( fieldBullets.Dequeue () );
-			}
+			if (CanBeShot () == false) return;
 
-			SoundManager.Instance.PlaySE ( SoundManager.SE.Shot );
+			Shot ();
 			anim.SetTrigger ( "isShot" );
-			var e = Instantiate ( muzzleEffect, transform.position, transform.rotation );
-			Destroy ( e, 1.0f );
+		}
+		// 離したとき
+		else {
+			shotPressed = false;
+			anim.SetBool ( "isAim", false );
 
-			magazine--;
-			onReload = false;
-			shotCooldown = shotInterval;
+			if (shotPressTime >= timeToAim && CanBeShot () == true) Shot ();
+
+			shotPressTime = 0;
+			canMove = true;
 		}
 	}
 
+	bool CanBeShot () {
+		return disableInput == false && magazine > 0 && shotCooldown <= 0;
+	}
+
+	void Shot () {
+		Vector3 shotPos = transform.position + transform.forward * 0.7f;
+		GameObject b = Instantiate ( bullet, shotPos, transform.rotation );
+		b.GetComponent<Bullet> ().Master = this;
+		fieldBullets.Enqueue ( b );
+		if (fieldBullets.Count > maxFieldBullet) {
+			Destroy ( fieldBullets.Dequeue () );
+		}
+
+		SoundManager.Instance.PlaySE ( SoundManager.SE.Shot );
+		var e = Instantiate ( muzzleEffect, transform.position, transform.rotation );
+		Destroy ( e, 1.0f );
+
+		magazine--;
+		onReload = false;
+		shotCooldown = shotInterval;
+	}
+
 	public void OnPause () {
-		Gc.Pause ( true );
+		GameControl.Instance.Pause ( true );
 	}
 
 	public void OnItem ( InputValue value ) {
@@ -339,7 +375,7 @@ public class Player : MonoBehaviour {
 				b.GetComponent<Bullet> ().Master = this;
 				fieldBullets.Enqueue ( b );
 				usableSpdBullet = false;
-				SoundManager.Instance.PlaySE( SoundManager.SE.SpeedBullet );
+				SoundManager.Instance.PlaySE ( SoundManager.SE.SpeedBullet );
 			}
 			else if (usableHevBullet == true) {
 				Vector3 shotPos = transform.position + transform.forward * 0.5f;
@@ -347,7 +383,7 @@ public class Player : MonoBehaviour {
 				b.GetComponent<Bullet> ().Master = this;
 				fieldBullets.Enqueue ( b );
 				usableHevBullet = false;
-				SoundManager.Instance.PlaySE( SoundManager.SE.HeavyBullet );
+				SoundManager.Instance.PlaySE ( SoundManager.SE.HeavyBullet );
 			}
 			else if (usableBoots == true) {
 				usableBoots = false;
@@ -358,13 +394,13 @@ public class Player : MonoBehaviour {
 				isStartedSlowTimer = true;
 			}
 
-			if(disableInput == true || usableBoots == true || usableSlowTimer == true) {
-				SoundManager.Instance.PlaySE( SoundManager.SE.UseItem );
+			if (disableInput == true || usableBoots == true || usableSlowTimer == true) {
+				SoundManager.Instance.PlaySE ( SoundManager.SE.UseItem );
 			}
 		}
 	}
 
 	public void OnBack () {
-		Gc.Pause ( false );
+		GameControl.Instance.Pause ( false );
 	}
 }
