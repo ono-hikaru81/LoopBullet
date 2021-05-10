@@ -255,11 +255,15 @@ public class Player : MonoBehaviour {
 			SoundManager.Instance.PlaySE( SoundManager.SE.GetItem );
 		}
 
-		if (collision.gameObject.tag == "Satellite") {
+		if (collision.gameObject.tag == "Satellite" || collision.gameObject.tag == "Bullet") {
 			if (takeDamage == true) {
-				score--;
-				ShowScore?.Exec ( transform, -1 );
-				ResetInvincibleTimer ();
+				if (collision.gameObject.tag == "Satellite") {
+					score--;
+					ShowScore?.Exec ( transform, -1 );
+					ResetInvincibleTimer ();
+				}
+
+				anim.SetTrigger ( "takeDamage" );
 			}
 		}
 	}

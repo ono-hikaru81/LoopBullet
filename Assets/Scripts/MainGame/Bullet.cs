@@ -88,6 +88,7 @@ public class Bullet : MonoBehaviour {
 				p.Score -= s;
 				p.ResetInvincibleTimer ();
 				showScore?.Exec ( p.transform, -s );
+				GameControl.Instance.UpdateRank ();
 			}
 
 			var e = Instantiate ( hitEffect, transform.position, transform.rotation );

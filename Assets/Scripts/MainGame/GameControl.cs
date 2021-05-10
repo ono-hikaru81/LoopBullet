@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class GameControl : MonoBehaviour {
+public class GameControl : Singleton<GameControl> {
 	[SerializeField] GameObject[] playerUIList;
+	StatusUI[] statusUIs;
 	List<Player> rank = new List<Player> ();
 	public List<Player> Rank { get => rank; set => rank = value; }
 
@@ -15,12 +16,14 @@ public class GameControl : MonoBehaviour {
 	[SerializeField] GameObject start;
 	[SerializeField] GameObject[] countNum;
 	[SerializeField] GameObject finish;
+
+	[SerializeField] GameObject mainCanvas;
 	[SerializeField] GameObject result;
 	[SerializeField] GameObject pause;
 
-	static bool isPause;    // ポーズフラグ
-	static bool isStart;    // ゲーム開始フラグ
-	static bool isEnd;  // ゲーム終了フラグ
+	bool isPause;    // ポーズフラグ
+	bool isStart;    // ゲーム開始フラグ
+	bool isEnd;  // ゲーム終了フラグ
 
 	// 時間
 	[SerializeField] GameObject timerObj;
@@ -31,8 +34,10 @@ public class GameControl : MonoBehaviour {
 		set { timer = value; }
 	}
 
-	[SerializeField] Texture[] numbers;
-	[SerializeField] RawImage[] timers;
+	[SerializeField] int lastSpurtTime;
+	public int LastSpurtTime { get => lastSpurtTime; }
+
+	[SerializeField] Crown crown;
 
 	// Start is called before the first frame update
 	void Start () {
@@ -43,6 +48,7 @@ public class GameControl : MonoBehaviour {
 		foreach (var c in countNum) {
 			c.SetActive ( false );
 		}
+		mainCanvas.SetActive ( true );
 		pause.SetActive ( false );
 		result.SetActive ( false );
 		StartCoroutine ( StartLogo () );
@@ -53,6 +59,11 @@ public class GameControl : MonoBehaviour {
 		foreach (var p in GameSetting.Instance.Players) {
 			p.GetComponent<Player> ().Gc = this;
 			p.GetComponent<Player> ().ShowScore = GameObject.Find ( "ScoreMng" ).GetComponent<ShowScore> ();
+		}
+
+		statusUIs = new StatusUI[playerUIList.Length];
+		for (int i = 0; i < playerUIList.Length; i++) {
+			statusUIs[i] = playerUIList[i].GetComponent<StatusUI> ();
 		}
 
 		// 星の生成
@@ -88,28 +99,27 @@ public class GameControl : MonoBehaviour {
 			Rank.Add ( o.GetComponent<Player> () );
 		}
 
+		UpdateRank ();
+		crown.Reset ();
+		crown.UnsetMaster ();
+
 		SoundManager.Instance.PlayBGM ( SoundManager.BGM.MainGame );
 	}
 
 	// Update is called once per frame
 	void Update () {
-		// 順位計算
-		Rank = Rank.OrderBy ( x => x.Score ).ToList ();
-		Rank.Reverse ();
-
 		// タイマー
 		if (isStart == true && isEnd == false && isPause == false) {
 			timer -= Time.deltaTime;
-			var t = (int)timer;
-			for (int d = 0; d < timers.Length; d++) {
-				var n = t % 10;
-				timers[d].texture = numbers[n];
-				t /= 10;
-			}
 		}
 
 		if (timer < 0) {
 			isEnd = true;
+		}
+		else if ((int)timer == LastSpurtTime) {
+			foreach (var u in statusUIs) {
+				u.HideScore ();
+			}
 		}
 
 		if (isEnd == true && finish.activeSelf == false && result.activeSelf == false) {    // ゲーム終了したら
@@ -124,6 +134,7 @@ public class GameControl : MonoBehaviour {
 		SoundManager.Instance.PlayBGM ( SoundManager.BGM.Result );
 		timerObj.SetActive ( false );
 		finish.SetActive ( false );
+		mainCanvas.SetActive ( false );
 		result.SetActive ( true );
 	}
 
@@ -167,5 +178,12 @@ public class GameControl : MonoBehaviour {
 		foreach (var p in GameSetting.Instance.Players) {
 			p.GetComponent<Player> ().DisableInput = false;
 		}
+	}
+
+	public void UpdateRank () {
+		// 順位の更新
+		rank = Rank.OrderBy ( x => x.Score ).ToList ();
+		rank.Reverse ();
+		crown.ChangeMaster ( rank.First ().transform );
 	}
 }

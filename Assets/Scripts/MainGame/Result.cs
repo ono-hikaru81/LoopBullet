@@ -14,7 +14,8 @@ public class Result : MonoBehaviour {
 	UIShadow[] menus;
 	int currentSelect;
 	bool showMenu;
-	[SerializeField] RawImage[] iconFrames;
+	[SerializeField] GameObject[] modelPosList;
+	[SerializeField] GameObject model;
 	[SerializeField] RawImage[] numbers;
 	[SerializeField] Score[] scoreUIs;
 
@@ -34,11 +35,19 @@ public class Result : MonoBehaviour {
 		UpdateUI ();
 
 		// スコア順に並べる
-		var p = FindObjectOfType<GameControl> ().Rank;
+		var p = GameControl.Instance.Rank;
 
 		for (int i = 0; i < p.Count; i++) {
 			var n = p[i].GetComponent<PlayerInput> ().playerIndex;
-			iconFrames[i].texture = GameSetting.Instance.PlayerIcons[n];
+			// エモート用モデルを生成
+			var o = Instantiate ( model, modelPosList[i].transform.position, modelPosList[i].transform.rotation );
+			// テクスチャを貼る
+			var s = o.GetComponentsInChildren<SkinnedMeshRenderer> ();
+			foreach (var m in s) {
+				m.material = GameSetting.Instance.PlayerMaterials[n];
+			}
+			o.GetComponent<Animator> ().SetInteger ( "rank", i + 1 );
+
 			numbers[i].texture = GameSetting.Instance.PlayerNumbers[n];
 			scoreUIs[i].UpdateUI ( p[i] );
 		}
@@ -81,6 +90,9 @@ public class Result : MonoBehaviour {
 			menu.SetActive ( true );
 		}
 		else {
+			Destroy ( GameControl.Instance.gameObject );
+			var o = FindObjectOfType<Crown> ();
+			Destroy ( o.gameObject );
 			// そのシーンへ
 			if (menus[currentSelect] == again) {
 				SceneManager.LoadScene ( "MainGame" );

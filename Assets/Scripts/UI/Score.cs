@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour {
 	[SerializeField] RawImage[] scoreRigid;
 	[SerializeField] Texture[] numbers;
+	[SerializeField] Texture question;
+	bool hide;
 
 	// Start is called before the first frame update
 	void Start () {
-
+		hide = false;
 	}
 
 	// Update is called once per frame
@@ -18,6 +20,8 @@ public class Score : MonoBehaviour {
 	}
 
 	public void UpdateUI ( Player player ) {
+		if (hide == true) return;
+
 		var s = player.Score;
 		if (s < 0) {
 			foreach (var r in scoreRigid) {
@@ -30,6 +34,13 @@ public class Score : MonoBehaviour {
 			var n = s % 10;
 			scoreRigid[r].texture = numbers[n];
 			s /= 10;
+		}
+	}
+
+	public void HideScore () {
+		hide = true;
+		foreach (var r in scoreRigid) {
+			r.texture = question;
 		}
 	}
 }

@@ -21,6 +21,7 @@ public class StatusUI : MonoBehaviour {
 	[SerializeField] Texture boots;
 	[SerializeField] Texture slowTimer;
 	[SerializeField] Texture noItem;
+	[SerializeField] Score score;
 	// Start is called before the first frame update
 	void Start () {
 		gameControl = FindObjectOfType<GameControl> ();
@@ -31,6 +32,9 @@ public class StatusUI : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		// Score
+		score.UpdateUI ( player );
+
 		// Rank
 		for (int i = 0; i < gameControl.Rank.Count; i++) {
 			if (gameControl.Rank[i] == player) {
@@ -74,5 +78,9 @@ public class StatusUI : MonoBehaviour {
 		for (int i = 0; i < player.Magazine; i++) {
 			magazine[i].texture = bullet;
 		}
+	}
+
+	public void HideScore () {
+		score.HideScore ();
 	}
 }
