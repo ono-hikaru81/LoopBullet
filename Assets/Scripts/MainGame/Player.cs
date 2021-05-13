@@ -123,6 +123,12 @@ public class Player : MonoBehaviour {
 
 	// エフェクト
 	GameObject muzzleEffect;
+	GameObject auraEffect;
+	Transform auraEffectOfRadar;
+	Transform auraEffectOfSpdBullet;
+	Transform auraEffectOfHevBullet;
+	Transform auraEffectOfBoots;
+	Transform auraEffectOfSlowTimer;
 
 	void Start () {
 		bc = GetComponent<BoxCollider> ();
@@ -148,6 +154,12 @@ public class Player : MonoBehaviour {
 		usableSlowTimer = false;
 		invincibleTimer = invincibleInterval;
 		muzzleEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Muzzle/MuzzleFlash" );
+		auraEffect = (GameObject)Resources.Load("Prefabs/Effects/Aura/Aura");
+		auraEffectOfRadar = auraEffect.transform.GetChild(0);
+		auraEffectOfSpdBullet = auraEffect.transform.GetChild(4);
+		auraEffectOfHevBullet = auraEffect.transform.GetChild(2);
+		auraEffectOfBoots = auraEffect.transform.GetChild(1);
+		auraEffectOfSlowTimer = auraEffect.transform.GetChild(3);
 	}
 
 	void Update () {
@@ -236,6 +248,23 @@ public class Player : MonoBehaviour {
 		if (shotPressTime >= timeToAim) {
 			canMove = false;
 			anim.SetBool ( "isAim", true );
+		}
+
+        // オーラエフェクト
+        if (usableRadar == true) {
+			Instantiate(auraEffectOfRadar, transform.position, transform.rotation);
+		}
+		else if (usableSpdBullet == true) {
+			Instantiate(auraEffectOfSpdBullet, transform.position, transform.rotation);
+		}
+		else if (usableHevBullet == true) {
+			Instantiate(auraEffectOfHevBullet, transform.position, transform.rotation);
+		}
+		else if (usableBoots == true) {
+			Instantiate(auraEffectOfBoots, transform.position, transform.rotation);
+		}
+		else if (usableSlowTimer == true) {
+			Instantiate(auraEffectOfSlowTimer, transform.position, transform.rotation);
 		}
 	}
 
