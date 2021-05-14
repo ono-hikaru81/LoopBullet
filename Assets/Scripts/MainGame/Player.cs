@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -154,12 +155,12 @@ public class Player : MonoBehaviour {
 		usableSlowTimer = false;
 		invincibleTimer = invincibleInterval;
 		muzzleEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Muzzle/MuzzleFlash" );
-		auraEffect = (GameObject)Resources.Load("Prefabs/Effects/Aura/Aura");
-		auraEffectOfRadar = auraEffect.transform.GetChild(0);
-		auraEffectOfSpdBullet = auraEffect.transform.GetChild(4);
-		auraEffectOfHevBullet = auraEffect.transform.GetChild(2);
-		auraEffectOfBoots = auraEffect.transform.GetChild(1);
-		auraEffectOfSlowTimer = auraEffect.transform.GetChild(3);
+		auraEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Aura/Aura" );
+		auraEffectOfRadar = auraEffect.transform.GetChild ( 0 );
+		auraEffectOfSpdBullet = auraEffect.transform.GetChild ( 4 );
+		auraEffectOfHevBullet = auraEffect.transform.GetChild ( 2 );
+		auraEffectOfBoots = auraEffect.transform.GetChild ( 1 );
+		auraEffectOfSlowTimer = auraEffect.transform.GetChild ( 3 );
 	}
 
 	void Update () {
@@ -184,15 +185,14 @@ public class Player : MonoBehaviour {
 		}
 
 		// Gravity
+		// 何かに当たるまで6方向にRayを出す
 		RaycastHit hit = new RaycastHit ();
-		if (Physics.Raycast ( transform.position, -transform.up, out hit, 10 )) {
-			if (hit.collider.isTrigger == false && hit.collider.tag != "Wall") {
-				distanceToGround = hit.distance;
-				groundNormal = hit.normal;
-			}
-
-			onGround = (distanceToGround <= 0.1f) ? true : false;
-		}
+		if (Physics.Raycast ( transform.position, -transform.up, out hit, 20 )) SetParallelData ( hit );
+		else if (Physics.Raycast ( transform.position, transform.forward, out hit, 20 )) SetParallelData ( hit );
+		else if (Physics.Raycast ( transform.position, -transform.forward, out hit, 20 )) SetParallelData ( hit );
+		else if (Physics.Raycast ( transform.position, transform.up, out hit, 20 )) SetParallelData ( hit );
+		else if (Physics.Raycast ( transform.position, transform.right, out hit, 20 )) SetParallelData ( hit );
+		else if (Physics.Raycast ( transform.position, -transform.right, out hit, 20 )) SetParallelData ( hit );
 
 		Vector3 gravDirection = (transform.position - planet.transform.position).normalized;
 
@@ -250,21 +250,21 @@ public class Player : MonoBehaviour {
 			anim.SetBool ( "isAim", true );
 		}
 
-        // オーラエフェクト
-        if (usableRadar == true) {
-			Instantiate(auraEffectOfRadar, transform.position, transform.rotation);
+		// オーラエフェクト
+		if (usableRadar == true) {
+			Instantiate ( auraEffectOfRadar, transform.position, transform.rotation );
 		}
 		else if (usableSpdBullet == true) {
-			Instantiate(auraEffectOfSpdBullet, transform.position, transform.rotation);
+			Instantiate ( auraEffectOfSpdBullet, transform.position, transform.rotation );
 		}
 		else if (usableHevBullet == true) {
-			Instantiate(auraEffectOfHevBullet, transform.position, transform.rotation);
+			Instantiate ( auraEffectOfHevBullet, transform.position, transform.rotation );
 		}
 		else if (usableBoots == true) {
-			Instantiate(auraEffectOfBoots, transform.position, transform.rotation);
+			Instantiate ( auraEffectOfBoots, transform.position, transform.rotation );
 		}
 		else if (usableSlowTimer == true) {
-			Instantiate(auraEffectOfSlowTimer, transform.position, transform.rotation);
+			Instantiate ( auraEffectOfSlowTimer, transform.position, transform.rotation );
 		}
 	}
 
@@ -272,6 +272,15 @@ public class Player : MonoBehaviour {
 	public void ParallelToPlanet () {
 		Quaternion toRotation = Quaternion.FromToRotation ( transform.up, groundNormal ) * transform.rotation;
 		transform.rotation = toRotation;
+	}
+
+	void SetParallelData ( RaycastHit hit ) {
+		if (hit.collider.isTrigger == false && hit.collider.tag != "Wall") {
+			distanceToGround = hit.distance;
+			groundNormal = hit.normal;
+		}
+
+		onGround = (distanceToGround <= 0.1f) ? true : false;
 	}
 
 	public void DeathProc () {
