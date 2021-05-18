@@ -749,6 +749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c1a30c9b88b76498aa8488891ca25d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
 --- !u!114 &188998718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,7 +762,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b59bf846d07fa7418204fcbc97a7f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBox: {fileID: 9083882253009694658, guid: ab1edb0e4f55b3448a7753474e84851e, type: 3}
+  radar: {fileID: 9083882253009694658, guid: ab1edb0e4f55b3448a7753474e84851e, type: 3}
+  bullet: {fileID: 6188280152784139868, guid: 24ecb2ee3104b7a4eb924a2197aa37e1, type: 3}
+  boots: {fileID: 7123366658360747575, guid: 9120fa3261032a3479981c479824c195, type: 3}
+  slowTimer: {fileID: 1664992581366861546, guid: e613a92e76dffc146a0568c2f8b94b08,
+    type: 3}
   intervalTime: 3
 --- !u!114 &188998719
 MonoBehaviour:
