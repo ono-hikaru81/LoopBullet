@@ -62,6 +62,5 @@ public class ItemManager : MonoBehaviour {
 			currentState = (Item)randomNum;
 			isAssignedItem = true;
 		}
-		Debug.Log(currentState);
 	}
 }

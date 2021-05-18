@@ -76,7 +76,5 @@ public class CreateItemBox : MonoBehaviour {
                 randNum = -1;
             }
         }
-        Debug.Log(gc.GetComponent<ItemManager>().currentState);
-        Debug.Log(item);
     }
 }

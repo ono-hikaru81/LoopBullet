@@ -251,7 +251,7 @@ public class Player : MonoBehaviour {
 		}
 
 		// オーラエフェクト
-		if (usableRadar == true) {
+		if (isStartedRadar == true) {
 			Instantiate ( auraEffectOfRadar, transform.position, transform.rotation );
 		}
 		else if (usableSpdBullet == true) {
@@ -260,10 +260,10 @@ public class Player : MonoBehaviour {
 		else if (usableHevBullet == true) {
 			Instantiate ( auraEffectOfHevBullet, transform.position, transform.rotation );
 		}
-		else if (usableBoots == true) {
+		else if (isSpeedUp == true) {
 			Instantiate ( auraEffectOfBoots, transform.position, transform.rotation );
 		}
-		else if (usableSlowTimer == true) {
+		else if (isStartedSlowTimer == true) {
 			Instantiate ( auraEffectOfSlowTimer, transform.position, transform.rotation );
 		}
 	}
