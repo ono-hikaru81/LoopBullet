@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour {
+	GameObject gc;
 	public enum Item {
 		radar,
 		speedBullet,
@@ -12,22 +13,29 @@ public class ItemManager : MonoBehaviour {
 
 		Max,
 	};
+	public Item currentState;
 
 	int itemNum;
 	int randomNum;
+	bool isAssignedItem;
+	public bool IsAssignedItem {
+		get { return isAssignedItem; }
+		set { isAssignedItem = value; }
+	}
 
 	void Start () {
+		gc = GameObject.Find("GameControl");
+		currentState = Item.Max;
 		itemNum = (int)Item.Max;
 		randomNum = -1;
+		isAssignedItem = false;
 	}
 
 	void Update () {
 		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
 			if (GameSetting.Instance.Players[i] != null) {
 				if (GameSetting.Instance.Players[i].GetComponent<Player> ().IsHitItemBox == true) {
-					randomNum = Random.Range ( 0, itemNum );
-
-					switch ((Item)randomNum) {
+					switch (currentState) {
 						case Item.radar:
 							GameSetting.Instance.Players[i].GetComponent<Player> ().UsableRadar = true;
 							break;
@@ -48,5 +56,12 @@ public class ItemManager : MonoBehaviour {
 				}
 			}
 		}
+
+		if (isAssignedItem == false) {
+			randomNum = Random.Range(0, itemNum);
+			currentState = (Item)randomNum;
+			isAssignedItem = true;
+		}
+		Debug.Log(currentState);
 	}
 }

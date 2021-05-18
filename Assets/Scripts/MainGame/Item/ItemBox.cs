@@ -2,23 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemBox : MonoBehaviour
-{
-    [SerializeField]
-    GameObject planet;  // d—Í‚ðŽó‚¯‚é¯
-    public GameObject Planet { get => planet; set => planet = value; }
+public class ItemBox : MonoBehaviour {
+    Rigidbody rb;
     GameObject gc;
+    MeshRenderer mr;
+    [SerializeField] GameObject planet;  // d—Í‚ðŽó‚¯‚é¯
+    public GameObject Planet { get => planet; set => planet = value; }
     const float GRAVITY = 100;
     bool onGround;
     float distanceToGround;
     Vector3 groundNormal;
-    Rigidbody rb;
 
-    private bool isExit;
+    bool isExit;
     public bool IsExit {
         get { return isExit; }
         set { isExit = value; }
     }
+
+    int itemNum;
+    int randomNum;
 
     void Start() {
         gc = GameObject.Find("GameControl");
@@ -50,6 +52,7 @@ public class ItemBox : MonoBehaviour
     private void OnCollisionEnter(Collision collision) {
         if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall") {
             gc.GetComponent<CreateItemBox>().IsExitItemBox = false;
+            gc.GetComponent<ItemManager>().IsAssignedItem = false;
             Destroy(gameObject);
         }
     }
