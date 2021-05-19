@@ -6,7 +6,18 @@ ModelImporter:
   - first:
       74: 1827226128182048838
     second: Take 001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: c219e1d738823f24b8434ebb8f6a411e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shoes_tex
+    second: {fileID: 7922251121040759823, guid: 964edb90e8ea8864399e8217c199623f,
+      type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

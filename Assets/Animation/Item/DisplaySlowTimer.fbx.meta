@@ -6,7 +6,12 @@ ModelImporter:
   - first:
       74: 1827226128182048838
     second: Take 001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: timer_tex
+    second: {fileID: 2100000, guid: b2e4c855e175a8d458ed44a4e23927be, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
