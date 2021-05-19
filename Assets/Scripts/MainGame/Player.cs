@@ -123,7 +123,6 @@ public class Player : MonoBehaviour {
 	bool canMove = true;
 
 	// エフェクト
-	GameObject muzzleEffect;
 	GameObject auraEffect;
 	Transform auraEffectOfRadar;
 	Transform auraEffectOfSpdBullet;
@@ -154,7 +153,6 @@ public class Player : MonoBehaviour {
 		usableBoots = false;
 		usableSlowTimer = false;
 		invincibleTimer = invincibleInterval;
-		muzzleEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Muzzle/MuzzleFlash" );
 		auraEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Aura/Aura" );
 		auraEffectOfRadar = auraEffect.transform.GetChild ( 0 );
 		auraEffectOfSpdBullet = auraEffect.transform.GetChild ( 4 );
@@ -388,8 +386,6 @@ public class Player : MonoBehaviour {
 		}
 
 		SoundManager.Instance.PlaySE ( SoundManager.SE.Shot );
-		var e = Instantiate ( muzzleEffect, transform.position, transform.rotation );
-		Destroy ( e, 1.0f );
 
 		magazine--;
 		onReload = false;

@@ -22,6 +22,7 @@ public class StatusUI : MonoBehaviour {
 	[SerializeField] Texture slowTimer;
 	[SerializeField] Texture noItem;
 	[SerializeField] Score score;
+	[SerializeField] RectTransform number;
 	// Start is called before the first frame update
 	void Start () {
 		gameControl = FindObjectOfType<GameControl> ();
@@ -82,5 +83,16 @@ public class StatusUI : MonoBehaviour {
 
 	public void HideScore () {
 		score.HideScore ();
+	}
+
+	public void SetNumberPos ( int playerNum ) {
+		// 2人以下の場合
+		var p = number.localPosition;
+		p.y = playerNum switch
+		{
+			2 => 270,
+			_ => 470,
+		};
+		number.localPosition = p;
 	}
 }

@@ -79,6 +79,7 @@ MonoBehaviour:
   slowTimer: {fileID: 2800000, guid: 0efc644a0b8486a4ea2fb337c172a6e4, type: 3}
   noItem: {fileID: 2800000, guid: 02c4afa2601db1b4f8287af64236c0a6, type: 3}
   score: {fileID: 6322514205264640600}
+  number: {fileID: 161963080403884302}
 --- !u!1 &161963079623892299
 GameObject:
   m_ObjectHideFlags: 0

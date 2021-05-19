@@ -110,10 +110,11 @@ public class GameControl : Singleton<GameControl> {
 		}
 
 		// プレイヤー設定
-		for (int i = 0; i < GameSetting.Instance.Players.ToArray ().Length; i++) {
+		for (int i = 0; i < GameSetting.Instance.Players.Count; i++) {
 			var n = GameSetting.Instance.Players[i].GetComponent<PlayerInput> ().playerIndex;
 			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Instance.Players[i].GetComponent<Player> ();
 			playerUIList[n].SetActive ( true );
+			playerUIList[n].GetComponent<StatusUI> ().SetNumberPos ( GameSetting.Instance.Players.Count );
 			GameSetting.Instance.Players[i].GetComponent<Player> ().Planet = star;
 			// スポーン地点
 			SpawnPoint s;
