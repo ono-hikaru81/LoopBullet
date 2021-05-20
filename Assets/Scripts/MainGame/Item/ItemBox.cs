@@ -26,7 +26,6 @@ public class ItemBox : MonoBehaviour {
         gc = GameObject.Find("GameControl");
         onGround = false;
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
     }
 
     void Update() {

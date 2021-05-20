@@ -5,7 +5,8 @@ using UnityEngine;
 public class CreateItemBox : MonoBehaviour {
     GameObject item;
     [SerializeField] GameObject radar;
-    [SerializeField] GameObject bullet;
+    [SerializeField] GameObject speedBullet;
+    [SerializeField] GameObject heavyBullet;
     [SerializeField] GameObject boots;
     [SerializeField] GameObject slowTimer;
     GameObject gc;
@@ -32,9 +33,11 @@ public class CreateItemBox : MonoBehaviour {
             if (gc.GetComponent<ItemManager>().currentState == ItemManager.Item.radar) {
                 item = radar;
             }
-            else if (gc.GetComponent<ItemManager>().currentState == ItemManager.Item.speedBullet ||
-                     gc.GetComponent<ItemManager>().currentState == ItemManager.Item.heavyBullet) {
-                item = bullet;
+            else if (gc.GetComponent<ItemManager>().currentState == ItemManager.Item.speedBullet) {
+                item = speedBullet;
+            }
+            else if (gc.GetComponent<ItemManager>().currentState == ItemManager.Item.heavyBullet) {
+                item = heavyBullet;
             }
             else if (gc.GetComponent<ItemManager>().currentState == ItemManager.Item.boots) {
                 item = boots;
