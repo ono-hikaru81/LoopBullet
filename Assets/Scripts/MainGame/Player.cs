@@ -278,7 +278,7 @@ public class Player : MonoBehaviour {
 			groundNormal = hit.normal;
 		}
 
-		onGround = (distanceToGround <= 0.1f) ? true : false;
+		onGround = (distanceToGround <= 0.2f) ? true : false;
 	}
 
 	public void DeathProc () {
