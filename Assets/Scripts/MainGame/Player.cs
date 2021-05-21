@@ -309,7 +309,7 @@ public class Player : MonoBehaviour {
 		if (collision.gameObject.tag == "Satellite" || collision.gameObject.tag == "Bullet") {
 			if (takeDamage == true) {
 				if (collision.gameObject.tag == "Satellite") {
-					score--;
+					score -= 1;
 					ShowScore?.Exec ( transform, -1 );
 					ResetInvincibleTimer ();
 				}
