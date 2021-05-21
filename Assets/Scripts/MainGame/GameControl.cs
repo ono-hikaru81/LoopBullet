@@ -112,10 +112,13 @@ public class GameControl : Singleton<GameControl> {
 		// プレイヤー設定
 		for (int i = 0; i < GameSetting.Instance.Players.Count; i++) {
 			var n = GameSetting.Instance.Players[i].GetComponent<PlayerInput> ().playerIndex;
+			GameSetting.Instance.Players[i].GetComponent<Player> ().Planet = star;
 			playerUIList[n].GetComponent<StatusUI> ().PlayerData = GameSetting.Instance.Players[i].GetComponent<Player> ();
 			playerUIList[n].SetActive ( true );
-			playerUIList[n].GetComponent<StatusUI> ().SetNumberPos ( GameSetting.Instance.Players.Count );
-			GameSetting.Instance.Players[i].GetComponent<Player> ().Planet = star;
+			if (GameSetting.Instance.Players.Count <= 2) {
+				playerUIList[n].GetComponent<StatusUI> ().SetNumberPos ( GameSetting.Instance.Players.Count );
+			}
+
 			// スポーン地点
 			SpawnPoint s;
 			while (true) {
@@ -167,6 +170,10 @@ public class GameControl : Singleton<GameControl> {
 	}
 
 	void EndProc () {
+		foreach (var p in GameSetting.Instance.Players) {
+			p.GetComponent<Player> ().DisableInput = true;
+		}
+
 		SoundManager.Instance.PlayBGM ( SoundManager.BGM.Result );
 		timerObj.SetActive ( false );
 		finish.SetActive ( false );

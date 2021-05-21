@@ -43,8 +43,10 @@ public class Result : MonoBehaviour {
 			var o = Instantiate ( model, modelPosList[i].transform.position, modelPosList[i].transform.rotation );
 			// テクスチャを貼る
 			var s = o.GetComponentsInChildren<SkinnedMeshRenderer> ();
+			var pm = GameSetting.Instance.PlayerMaterials[n];
+			Material[] ma = { pm, pm };
 			foreach (var m in s) {
-				m.material = GameSetting.Instance.PlayerMaterials[n];
+				m.materials = ma;
 			}
 			o.GetComponent<Animator> ().SetInteger ( "rank", i + 1 );
 
@@ -110,7 +112,6 @@ public class Result : MonoBehaviour {
 	}
 
 	public void OnBack () {
-
 		if (showMenu == true) {
 			// メニュー表示
 			showMenu = false;

@@ -720,7 +720,7 @@ MonoBehaviour:
   result: {fileID: 1573024497}
   pause: {fileID: 1403454469}
   timerObj: {fileID: 800870841}
-  playTime: 180
+  playTime: 5
   lastSpurtTime: 30
   crown: {fileID: 879128145}
 --- !u!4 &188998716

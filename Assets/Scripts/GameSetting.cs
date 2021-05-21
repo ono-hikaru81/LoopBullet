@@ -53,8 +53,9 @@ public class GameSetting : Singleton<GameSetting> {
 		p.Reverse ();
 		for (int i = 0; i < players.Count; i++) {
 			var s = p[i].GetComponentsInChildren<SkinnedMeshRenderer> ();
+			Material[] ma = { playerMaterials[i], playerMaterials[i] };
 			foreach (var m in s) {
-				m.material = playerMaterials[i];
+				m.materials = ma;
 			}
 		}
 	}

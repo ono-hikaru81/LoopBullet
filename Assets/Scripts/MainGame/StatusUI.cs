@@ -86,13 +86,8 @@ public class StatusUI : MonoBehaviour {
 	}
 
 	public void SetNumberPos ( int playerNum ) {
-		// 2人以下の場合
 		var p = number.localPosition;
-		p.y = playerNum switch
-		{
-			2 => 270,
-			_ => 470,
-		};
+		p.y = 270;
 		number.localPosition = p;
 	}
 }
