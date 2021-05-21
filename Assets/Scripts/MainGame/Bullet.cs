@@ -112,9 +112,6 @@ public class Bullet : MonoBehaviour {
 	// 生存時間に応じてスコアを返す
 	int ConvertToScore () {
 		var t = (int)timer;
-		if (t == 7) return 7;
-		else if (t <= 3) return 3;
-		else if (t <= 8) return 2;
-		else return 1;
+		return 1;
 	}
 }
