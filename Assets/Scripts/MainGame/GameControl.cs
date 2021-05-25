@@ -75,6 +75,8 @@ public class GameControl : Singleton<GameControl> {
 
 		statusUIs = new StatusUI[playerUIList.Length];
 		for (int i = 0; i < playerUIList.Length; i++) {
+			var o = FindObjectOfType<GameControl> ();
+			Destroy( o?.gameObject );
 			statusUIs[i] = playerUIList[i].GetComponent<StatusUI> ();
 		}
 
