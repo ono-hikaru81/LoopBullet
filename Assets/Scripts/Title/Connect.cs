@@ -17,6 +17,7 @@ public class Connect : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start () {
 		playerInputManager = GetComponent<PlayerInputManager> ();
+		UpdateUI ();
 	}
 
 	// Update is called once per frame
@@ -31,18 +32,10 @@ public class Connect : MonoBehaviour {
 
 		playerInputManager.EnableJoining ();
 
-		// UIの更新
-		var players = FindObjectsOfType<Player> ();
-		foreach (var i in icons) {
-			i.SetActive ( false );
-		}
-
-		for (int n = 0; n < players.Length; n++) {
-			var i = players[n].GetComponent<PlayerInput> ().playerIndex;
-			icons[i].SetActive ( true );
-		}
+		UpdateUI ();
 
 		// 接続するとPlayerInputが使えなくなるので手動で
+		var players = FindObjectsOfType<Player> ();
 		if (CanPressedEnter () && players.Length > 0) {
 			GameSetting.Instance.Players = new List<GameObject> ();
 			foreach (var p in players) {
@@ -67,6 +60,19 @@ public class Connect : MonoBehaviour {
 
 			SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
 			TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
+		}
+	}
+
+	void UpdateUI () {
+		// UIの更新
+		var players = FindObjectsOfType<Player> ();
+		foreach (var i in icons) {
+			i.SetActive ( false );
+		}
+
+		for (int n = 0; n < players.Length; n++) {
+			var i = players[n].GetComponent<PlayerInput> ().playerIndex;
+			icons[i].SetActive ( true );
 		}
 	}
 

@@ -249,6 +249,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
+                },
+                {
+                    "name": "L",
+                    "type": "Button",
+                    "id": "89656f5f-f98c-44c7-8198-7ad0c0838598",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "R",
+                    "type": "Button",
+                    "id": "73ca1806-c2df-4950-a61a-ac00d7cb9dad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -381,6 +397,28 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a56cf7b9-ddf8-4be0-b10e-d99bbb01760b",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "L",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b308ed6b-c1ec-4c53-8f39-e8dafff2275b",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "R",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

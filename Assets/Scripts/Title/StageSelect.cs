@@ -73,6 +73,8 @@ public class StageSelect : MonoBehaviour {
 
 		GameSetting.Instance.SetPlayerMaterial ();
 
+		var o = FindObjectOfType<GameControl> ();
+		Destroy ( o?.gameObject );
 		SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
 		SceneManager.LoadScene ( "MainGame" );
 	}

@@ -433,8 +433,4 @@ public class Player : MonoBehaviour {
 			}
 		}
 	}
-
-	public void OnBack () {
-		GameControl.Instance.Pause ( false );
-	}
 }
