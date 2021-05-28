@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Subsystems;
 
-public class TitleManager : MonoBehaviour {
+public class TitleManager : Singleton<TitleManager> {
 	public enum Screens {
 		Title,
 		Menu,
@@ -14,14 +14,15 @@ public class TitleManager : MonoBehaviour {
 		Option,
 		SelectStage,
 	};
-	static string[] screenNameList;
+	string[] screenNameList;
 
+	[SerializeField] GameObject generalCanvas;
 	[SerializeField] GameObject title;
 	[SerializeField] GameObject menu;
 	[SerializeField] GameObject connect;
 	[SerializeField] GameObject option;
 	[SerializeField] GameObject selectStage;
-	static GameObject[] screens;
+	GameObject[] screens;
 
 	// Start is called before the first frame update
 	void Start () {
@@ -50,12 +51,13 @@ public class TitleManager : MonoBehaviour {
 
 	}
 
-	static public void ChangeScreen ( Screens next ) {
+	public void ChangeScreen ( Screens next ) {
 		foreach (GameObject s in screens) {
 			s.SetActive ( false );
 		}
 
 		var i = Array.FindIndex ( screenNameList, 0, x => x == next.ToString () );
 		screens[i].SetActive ( true );
+		generalCanvas.SetActive ( !connect.activeSelf );
 	}
 }

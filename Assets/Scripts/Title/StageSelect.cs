@@ -76,11 +76,15 @@ public class StageSelect : MonoBehaviour {
 		var o = FindObjectOfType<GameControl> ();
 		Destroy ( o?.gameObject );
 		SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
+		var p = FindObjectsOfType<Player> ();
+		foreach (var c in p) {
+			c.gameObject.GetComponentInChildren<Camera> ().enabled = true;
+		}
 		SceneManager.LoadScene ( "MainGame" );
 	}
 
 	public void OnBack () {
 		SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
-		TitleManager.ChangeScreen ( TitleManager.Screens.Connect );
+		TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Connect );
 	}
 }

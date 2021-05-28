@@ -98,10 +98,10 @@ public class Menu : MonoBehaviour {
 			SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
 
 			if (screens[currentSelect] == Screen.Connect) {
-				TitleManager.ChangeScreen ( TitleManager.Screens.Connect );
+				TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Connect );
 			}
 			else if (screens[currentSelect] == Screen.Option) {
-				TitleManager.ChangeScreen ( TitleManager.Screens.Option );
+				TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Option );
 			}
 			else if (screens[currentSelect] == Screen.Exit) {
 				exitPopup.gameObject.SetActive ( true );
@@ -117,7 +117,7 @@ public class Menu : MonoBehaviour {
 			exitPopup.gameObject.SetActive ( false );
 		}
 		else {
-			TitleManager.ChangeScreen ( TitleManager.Screens.Title );
+			TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Title );
 		}
 	}
 }

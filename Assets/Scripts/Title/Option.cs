@@ -39,7 +39,10 @@ public class Option : MonoBehaviour {
 		};
 		ChangeItem ();
 		UpdateRuleUI ();
-		UpdateSetting ();
+
+		masterVol.CurrentValue = GameSetting.Instance.MasterVol;
+		bgmVol.CurrentValue = GameSetting.Instance.BgmVol;
+		seVol.CurrentValue = GameSetting.Instance.SeVol;
 	}
 
 	// Update is called once per frame
@@ -48,13 +51,12 @@ public class Option : MonoBehaviour {
 	}
 
 	void UpdateSetting () {
-		// 音量変更
-		float vol = -80 + masterVol.CurrentValue * 8;
-		am.SetFloat ( "Master", vol );
-		vol = -80 + bgmVol.CurrentValue * 8;
-		am.SetFloat ( "BGM", vol );
-		vol = -80 + seVol.CurrentValue * 8;
-		am.SetFloat ( "SE", vol );
+		GameSetting.Instance.MasterVol = masterVol.CurrentValue;
+		GameSetting.Instance.BgmVol = bgmVol.CurrentValue;
+		GameSetting.Instance.SeVol = seVol.CurrentValue;
+		GameSetting.Instance.SetVolume ();
+		GameSetting.Instance.ColorVision = color.CurrentValue;
+		GameSetting.Instance.SetColorVision ();
 	}
 
 	// 操作する項目の変更
@@ -110,7 +112,7 @@ public class Option : MonoBehaviour {
 	public void OnBack () {
 		// ルール非表示なら
 		if (rule.activeSelf == false) {
-			TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
+			TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Menu );
 		}
 		else {
 			page--;

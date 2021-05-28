@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class GameSetting : Singleton<GameSetting> {
+	[SerializeField] AudioMixer audioMixer;
 	public enum Stars {
 		Jimejime,
 		Moon,
@@ -34,6 +37,18 @@ public class GameSetting : Singleton<GameSetting> {
 	Texture[] playerNumbers = new Texture[MAX_PLAYER];
 	public Texture[] PlayerNumbers { get => playerNumbers; set => playerNumbers = value; }
 
+	// オプション
+	private int masterVol = 7;
+	public int MasterVol { get => masterVol; set => masterVol = value; }
+	private int bgmVol = 7;
+	public int BgmVol { get => bgmVol; set => bgmVol = value; }
+	private int seVol = 7;
+	public int SeVol { get => seVol; set => seVol = value; }
+	private int colorVision = 0;
+	public int ColorVision { get => colorVision; set => colorVision = value; }
+	[SerializeField] private Color trailColor = Color.green;
+	public Color TrailColor { get => trailColor; set => trailColor = value; }
+
 	// Start is called before the first frame update
 	void Start () {
 		for (int i = 0; i < MAX_PLAYER; i++) {
@@ -41,6 +56,8 @@ public class GameSetting : Singleton<GameSetting> {
 			playerIcons[i] = (Texture)Resources.Load ( "Prefabs/Actor/Icons/" + (i + 1).ToString () + "P" );
 			playerNumbers[i] = (Texture)Resources.Load ( "Prefabs/Actor/" + (i + 1).ToString () + "P" );
 		}
+		SetVolume ();
+		SetColorVision ();
 	}
 
 	// Update is called once per frame
@@ -58,5 +75,25 @@ public class GameSetting : Singleton<GameSetting> {
 				m.materials = ma;
 			}
 		}
+	}
+
+	public void SetVolume () {
+		float vol = (masterVol == 0) ? -80 : -40 + masterVol * 4;
+		audioMixer.SetFloat ( "Master", vol );
+		vol = (bgmVol == 0) ? -80 : -40 + bgmVol * 4;
+		audioMixer.SetFloat ( "BGM", vol );
+		vol = (seVol == 0) ? -80 : -40 + seVol * 4;
+		audioMixer.SetFloat ( "SE", vol );
+	}
+
+	public void SetColorVision () {
+		trailColor = colorVision switch
+		{
+			0 => Color.green,
+			1 => Color.green,
+			2 => Color.blue,
+			3 => Color.red,
+			_ => Color.green,
+		};
 	}
 }

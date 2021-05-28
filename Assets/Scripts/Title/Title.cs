@@ -16,6 +16,6 @@ public class Title : MonoBehaviour {
 
 	public void OnEnter () {
 		SoundManager.Instance.PlaySE ( SoundManager.SE.TitleStart );
-		TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
+		TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Menu );
 	}
 }

@@ -8,11 +8,14 @@ using UnityEngine.UI;
 
 public class Connect : MonoBehaviour {
 	[SerializeField] GameObject[] icons;
+	[SerializeField] GameObject[] unconnectedImages;
 
 	// 入力
 	PlayerInputManager playerInputManager;
 	bool enterRelease;
 	bool backRelease;
+
+	int beforePlayers;
 
 	// Start is called before the first frame update
 	void Start () {
@@ -47,7 +50,7 @@ public class Connect : MonoBehaviour {
 			backRelease = false;
 
 			SoundManager.Instance.PlaySE ( SoundManager.SE.Next );
-			TitleManager.ChangeScreen ( TitleManager.Screens.SelectStage );
+			TitleManager.Instance.ChangeScreen ( TitleManager.Screens.SelectStage );
 		}
 		else if (CanPressedBack ()) {
 			foreach (var p in players) {
@@ -59,20 +62,29 @@ public class Connect : MonoBehaviour {
 			backRelease = false;
 
 			SoundManager.Instance.PlaySE ( SoundManager.SE.Back );
-			TitleManager.ChangeScreen ( TitleManager.Screens.Menu );
+			TitleManager.Instance.ChangeScreen ( TitleManager.Screens.Menu );
 		}
 	}
 
 	void UpdateUI () {
 		// UIの更新
 		var players = FindObjectsOfType<Player> ();
+
+		if (beforePlayers == players.Count ()) return;
+		beforePlayers = players.Count ();
+
 		foreach (var i in icons) {
 			i.SetActive ( false );
+		}
+
+		foreach (var u in unconnectedImages) {
+			u.SetActive ( true );
 		}
 
 		for (int n = 0; n < players.Length; n++) {
 			var i = players[n].GetComponent<PlayerInput> ().playerIndex;
 			icons[i].SetActive ( true );
+			unconnectedImages[i].SetActive ( false );
 		}
 	}
 
