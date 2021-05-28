@@ -182,7 +182,7 @@ Material:
     - _Is_ViewCoord_Scroll: 0
     - _Is_ViewShift: 0
     - _LightDirection_MaskOn: 0
-    - _MatCap: 0
+    - _MatCap: 1
     - _Metallic: 0
     - _Mode: 0
     - _Nearest_Distance: 0.5
