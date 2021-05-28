@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSpeed: 4
+  trail: {fileID: 7063550756246631570, guid: 606203359c2261947a3a8b7cf9cce96d, type: 3}
 --- !u!136 &5309913316216935524
 CapsuleCollider:
   m_ObjectHideFlags: 0
