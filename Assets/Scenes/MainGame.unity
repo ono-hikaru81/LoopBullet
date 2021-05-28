@@ -721,7 +721,7 @@ MonoBehaviour:
   result: {fileID: 1573024497}
   pause: {fileID: 1403454469}
   timerObj: {fileID: 800870841}
-  playTime: 2
+  playTime: 180
   lastSpurtTime: 30
   crown: {fileID: 879128145}
 --- !u!4 &188998716
@@ -7614,6 +7614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DisplayHeavyBullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 592691031728055362, guid: 9a2fd46665db82140b249f630237136b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5159934789344145866, guid: 9a2fd46665db82140b249f630237136b,
         type: 3}

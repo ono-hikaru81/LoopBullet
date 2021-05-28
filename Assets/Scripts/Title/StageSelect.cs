@@ -80,6 +80,7 @@ public class StageSelect : MonoBehaviour {
 		foreach (var c in p) {
 			c.gameObject.GetComponentInChildren<Camera> ().enabled = true;
 		}
+		Destroy ( FindObjectOfType<TitleManager> ().gameObject );
 		SceneManager.LoadScene ( "MainGame" );
 	}
 
