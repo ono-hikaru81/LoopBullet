@@ -88,12 +88,12 @@ public class Connect : MonoBehaviour {
 		}
 	}
 
-	bool CanReleasedEnter () => Keyboard.current.cKey.wasReleasedThisFrame || Gamepad.current.buttonEast.wasReleasedThisFrame;
-	bool CanReleasedBack () => Keyboard.current.xKey.wasReleasedThisFrame || Gamepad.current.buttonSouth.wasReleasedThisFrame;
+	bool CanReleasedEnter () => /*Keyboard.current.cKey.wasReleasedThisFrame ||*/ Gamepad.current.buttonEast.wasReleasedThisFrame;
+	bool CanReleasedBack () => /*Keyboard.current.xKey.wasReleasedThisFrame ||*/ Gamepad.current.buttonSouth.wasReleasedThisFrame;
 
-	bool CanPressedEnter () => (Keyboard.current.cKey.isPressed || Gamepad.current.buttonEast.isPressed) && enterRelease;
+	bool CanPressedEnter () => /*(Keyboard.current.cKey.isPressed ||*/ Gamepad.current.buttonEast.isPressed && enterRelease;
 
-	bool CanPressedBack () => (Keyboard.current.xKey.isPressed || Gamepad.current.buttonSouth.isPressed) && backRelease;
+	bool CanPressedBack () => /*(Keyboard.current.xKey.isPressed ||*/ Gamepad.current.buttonSouth.isPressed && backRelease;
 
 	public void OnPlayerJoined () {
 		SoundManager.Instance.PlaySE ( SoundManager.SE.Connect );
