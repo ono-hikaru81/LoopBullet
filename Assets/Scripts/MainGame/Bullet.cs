@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour {
 
 	// エフェクト
 	GameObject hitEffect;
-	[SerializeField] GameObject trail;
+	GameObject trail;
 
 	void Start () {
 		speed = baseSpeed;
@@ -43,6 +43,7 @@ public class Bullet : MonoBehaviour {
 
 		hitEffect = (GameObject)Resources.Load ( "Prefabs/Effects/Hit/Hit" );
 
+		trail = transform.Find("BulletTrail").gameObject;
 		trail.GetComponent<Renderer> ().material.color = GameSetting.Instance.TrailColor;
 	}
 
